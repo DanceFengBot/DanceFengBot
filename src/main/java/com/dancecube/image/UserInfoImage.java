@@ -28,7 +28,6 @@ public class UserInfoImage {
      * @param id    需要查看的信息目标
      */
     public static InputStream generate(Token token, int id) {
-        //todo 随机背景
         String bgPath = "file:" + configPath + "Images/UserInfoImage/Background2.png";
 
         UserInfo userInfo = UserInfo.get(token, id);
@@ -108,8 +107,8 @@ public class UserInfoImage {
 
     @Test
     public void test() {
-        Token token = new Token(939800, "Tbp4C0QAJeIsqNcJx7psKoYAxFNsD0qH68qutYCZod8ybPiRoEJ05RZhHzy4LPQDtw3tJvKYqSkCpnEd-qrg-c7MMY7DwQecXF3-uuU-6qDd7zIQ7IpfTHbcVHvN_st9XnVCyt9op0b6CYFY3nTvNH1F4aidP5M-P-MXes3-TIH80YHN8zHgua_XjgFWfi0loubYS0KW9APsB0POsoaBmeJz-85ZxnqlOdzUkW7cb9vGPzgQvP7adZPa6igEfynpx1YXTthssnhGyjKdMSQnKkR2Zhmx4zdbwo9N1eTDoAv0ZuNZ9-29gSirqGHbwRS-GXPnXG4mGLvdMuRWY1OKuLk1HWvV-AsceOuMvZX9vin0BcxGDKmK4axbU8kRQkx-");
-        String path = "C:\\Users\\Lin\\IdeaProjects\\DanceCubeBot\\DcConfig\\Images\\result.png";
+        Token token = new Token(5559326, "wiO19sIQ9FCc5KlQUatuMS9C_rFBWrQ9wMP2St2P6T25r_VJbhIb-dd3WmC_sqp67UD19UNyV5yCbF0bOYC9gezJzAKolxBL4wLBRbZAxKphndkxWmbcStWPZY_uuKzjg2k9tklJL6Pm-Alli7dOWStmt8ORu3UJMY7llVGkH-3ClMPwYzE3hgQuQr5QUDsh5wTZhN_Qi66Z3ClNKCs_E1lY_UMZsgSRIaNtVL3LVE6AKT6abRYha-iVSt4ILUIUPpBcyzTTPtFtQ1UMmp6LA_8C8UOGOSCMm9j4jaxCQpFd9r5eAizy1_Ls0BWu_4qsgXunH7mbdgX3OV2WEDpIs5nmDs6n1KstSWDDa-UcXzW8t5RzjCWRHqhhV355c4FZ");
+        String path = "N:\\Bots\\DcConfig\\Images\\UserInfoImage\\result.png";
         ImageDrawer.write(generate(token, 939088), path);
     }
 }

@@ -363,4 +363,19 @@ public class UserRatioImage {
         else comment = "";
         return comment;
     }
+    @Test
+    public void test() throws IOException {
+        System.out.println("Running...");
+        Token token = new Token(5559326, "wiO19sIQ9FCc5KlQUatuMS9C_rFBWrQ9wMP2St2P6T25r_VJbhIb-dd3WmC_sqp67UD19UNyV5yCbF0bOYC9gezJzAKolxBL4wLBRbZAxKphndkxWmbcStWPZY_uuKzjg2k9tklJL6Pm-Alli7dOWStmt8ORu3UJMY7llVGkH-3ClMPwYzE3hgQuQr5QUDsh5wTZhN_Qi66Z3ClNKCs_E1lY_UMZsgSRIaNtVL3LVE6AKT6abRYha-iVSt4ILUIUPpBcyzTTPtFtQ1UMmp6LA_8C8UOGOSCMm9j4jaxCQpFd9r5eAizy1_Ls0BWu_4qsgXunH7mbdgX3OV2WEDpIs5nmDs6n1KstSWDDa-UcXzW8t5RzjCWRHqhhV355c4FZ");
+        String path = "C:\\Users\\Administrator\\IdeaProjects\\dcbot\\DcConfig\\Images\\result.png";
+
+        InputStream image = generate(token);
+        Thumbnails.of(image)
+                .scale(1)
+                .outputFormat("png")
+                .toFile(path);
+//        ImageDrawer.write(ImageDrawer.convertPngToJpg(ImageDrawer.read(image),0.5f), path);
+//        ImageDrawer.write(ImageDrawer.read(image), path);
+        System.out.println("Done!");
+    }
 }

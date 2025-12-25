@@ -24,6 +24,7 @@ import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.GlobalEventChannel;
 import net.mamoe.mirai.event.events.MessageEvent;
 import net.mamoe.mirai.message.data.*;
+import net.mamoe.mirai.utils.ExternalResource;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -275,6 +276,22 @@ public class AllCommands {
             return event.getSender().getId() == another.getSender().getId();
         };
     }
+
+    @DeclaredCommand("获取官谱封面")
+    public static final ArgsCommand getMusicCover = new ArgsCommandBuilder()
+            .prefix("获取官谱封面")
+            .form(ArgsCommand.CHAR)
+            .onCall(Scope.GROUP, (event, contact, qq, args) -> {
+                if(args==null) return;
+                //后跟官谱id
+                long num = Long.parseLong(args[0]);
+                ExternalResource getCover = PlayerMusic.getMusicCover(num);
+                if (getCover==null) {
+                    contact.sendMessage("没有找到该官谱封面诶...");
+                    return;
+                }
+                contact.uploadImage(getCover);
+            }).build();
 
     @DeclaredCommand("个人信息")
     public static final RegexCommand msgUserInfo = new RegexCommandBuilder()

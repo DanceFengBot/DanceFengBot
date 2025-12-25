@@ -286,6 +286,7 @@ public class AllCommands {
                 //后跟官谱id
                 long num = Long.parseLong(args[0]);
                 ExternalResource getCover = PlayerMusic.getMusicCover(num);
+                contact.uploadImage(getCover);
                 if (getCover==null) {
                     contact.sendMessage("没有找到该官谱封面诶...");
                     return;

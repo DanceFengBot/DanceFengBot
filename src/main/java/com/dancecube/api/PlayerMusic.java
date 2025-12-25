@@ -7,6 +7,7 @@ import okhttp3.Response;
 import com.mirai.config.AbstractConfig;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 public class PlayerMusic {
@@ -15,15 +16,16 @@ public class PlayerMusic {
                 Map.of("Authorization", token.getBearerToken()),
                 null);
     }
+
     public static ExternalResource getMusicCover(long num) {
         String coverPath = AbstractConfig.configPath + "/Images/Cover/OfficialImage/" + num + ".jpg";
         File coverFile = new File(coverPath);
 
         if (coverFile.exists() && coverFile.isFile()) {
-            return (ExternalResource) coverFile;
+            // 使用 ExternalResource.create() 创建 ExternalResource 实例
+            return ExternalResource.create(coverFile);
         } else {
             return null;
         }
     }
-
 }

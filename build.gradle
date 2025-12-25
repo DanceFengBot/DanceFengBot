@@ -9,7 +9,7 @@ plugins {
 // version = '0.1.0'
 group = 'com.mirai'
 def releaseTime() {
-    return new Date().format("yyyyMMddHHmm",TimeZone.getTimeZone("GMT+08:00"))
+    return new Date().format("yyyyMMdd-HHmm",TimeZone.getTimeZone("GMT+08:00"))
 }
 version = 'build-'+releaseTime()
 

@@ -277,7 +277,7 @@ public class AllCommands {
         };
     }
 
-    @DeclaredCommand("获取官谱封面")
+//    @DeclaredCommand("获取官谱封面")
     public static final ArgsCommand getMusicCover = new ArgsCommandBuilder()
             .prefix("获取官谱封面")
             .form(ArgsCommand.CHAR)

@@ -5,11 +5,9 @@ import com.dancecube.token.TokenBuilder;
 import com.mirai.event.MainHandler;
 import com.mirai.task.SchedulerTask;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
-import org.yaml.snakeyaml.Yaml;
 import net.mamoe.mirai.console.extension.PluginComponentStorage;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JavaPluginScheduler;
-import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription;
 import net.mamoe.mirai.event.Event;
 import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.GlobalEventChannel;
@@ -17,11 +15,11 @@ import net.mamoe.mirai.event.events.MessageEvent;
 import net.mamoe.mirai.event.events.NewFriendRequestEvent;
 import net.mamoe.mirai.event.events.NudgeEvent;
 import org.jetbrains.annotations.NotNull;
-import java.io.InputStream;
+import com.tools.DatabaseConnection;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
-
+import com.mirai.DatabaseInit;
 import static com.mirai.config.AbstractConfig.configPath;
 import static com.mirai.config.AbstractConfig.userTokensMap;
 
@@ -43,21 +41,32 @@ public final class MiraiBot extends JavaPlugin {
         super.onLoad($this$onLoad);
     }
 
-    // 修改后的MiraiBot.java（仅展示变更部分）
     @Override
     public void onEnable() {
         getLogger().info("Plugin loaded!");
+
+        // 连接数据库（在加载Token之前先连接数据库）
+        try {
+            if (!DatabaseConnection.connect()) {
+                getLogger().error("数据库连接失败，插件将关闭！");
+                onDisable(); // 关闭插件
+                return; // 提前返回，不再执行后续初始化
+            }
+            getLogger().info("数据库连接成功！");
+        } catch (Exception e) {
+            getLogger().error("数据库连接异常: " + e.getMessage());
+            onDisable();
+            return;
+        }
+
         EventChannel<Event> channel = GlobalEventChannel.INSTANCE
                 .parentScope(MiraiBot.INSTANCE)
                 .context(this.getCoroutineContext());
-
-
         // 输出加载Token
         onLoadToken();
-
+        DatabaseInit.init();
         // Token刷新器
         SchedulerTask.autoRefreshToken();
-
 
         // 监听器
         channel.subscribeAlways(MessageEvent.class, MainHandler::eventCenter);
@@ -70,6 +79,10 @@ public final class MiraiBot extends JavaPlugin {
         // 保存Tokens
         TokenBuilder.tokensToFile(userTokensMap, configPath + "UserTokens.json");
         System.out.printf("保存成功！共%d条%n", userTokensMap.size());
+
+        // 断开数据库连接
+        DatabaseConnection.disconnect();
+        getLogger().info("数据库连接已关闭");
     }
 
     @Deprecated
@@ -125,4 +138,3 @@ public final class MiraiBot extends JavaPlugin {
 
     }
 }
-

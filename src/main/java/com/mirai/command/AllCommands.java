@@ -28,7 +28,7 @@ import net.mamoe.mirai.utils.ExternalResource;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+import com.dancecube.info.MusicInfo;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -277,21 +277,17 @@ public class AllCommands {
         };
     }
 
-//    @DeclaredCommand("获取官谱封面")
-    public static final ArgsCommand getMusicCover = new ArgsCommandBuilder()
-            .prefix("获取官谱封面")
+    @DeclaredCommand("获取歌曲信息")
+    public static final ArgsCommand getMusicInfo = new ArgsCommandBuilder()
+            .prefix("获取歌曲信息", "查歌")
             .form(ArgsCommand.CHAR)
             .onCall(Scope.GROUP, (event, contact, qq, args) -> {
                 if(args==null) return;
                 //后跟官谱id
                 long num = Long.parseLong(args[0]);
-                ExternalResource getCover = PlayerMusic.getMusicCover(num);
-                contact.uploadImage(getCover);
-                if (getCover==null) {
-                    contact.sendMessage("没有找到该官谱封面诶...");
-                    return;
-                }
-                contact.uploadImage(getCover);
+                String msg = "歌曲名：%s\n封面链接：%s"
+                        .formatted(MusicInfo.name, MusicInfo.Cover);
+                contact.sendMessage(msg);
             }).build();
 
     @DeclaredCommand("个人信息")

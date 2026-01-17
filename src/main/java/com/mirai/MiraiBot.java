@@ -19,7 +19,7 @@ import com.tools.DatabaseConnection;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
-import com.mirai.DatabaseInit;
+import com.mirai.init.DatabaseInit;
 import static com.mirai.config.AbstractConfig.configPath;
 import static com.mirai.config.AbstractConfig.userTokensMap;
 

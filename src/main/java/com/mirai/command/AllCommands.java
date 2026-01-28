@@ -278,37 +278,37 @@ public class AllCommands {
         };
     }
 
-    @DeclaredCommand("获取歌曲信息")
-    public static final ArgsCommand getMusicInfo = new ArgsCommandBuilder()
-            .prefix("获取歌曲信息", "查歌")
-            .form(ArgsCommand.CHAR)
-            .onCall(Scope.GROUP, (event, contact, qq, args) -> {
-                if (args == null) return;
-                //后跟官谱id
-                long num = Long.parseLong(args[0]);
-                File imageFile = new File(configPath + "Images/Cover/OfficialImage/" + num + ".jpg");
-                Image image = null;
-                try (ExternalResource resource = ExternalResource.create(imageFile)) {
-                    image = contact.uploadImage(resource);
-                } catch (IOException e) {
-                    System.out.println("Failed to upload image: " + e.getMessage());
-                }
-                if (MusicInfo.id == -1) {
-                    contact.sendMessage("没有找到这首歌诶...");
-                    return;
-                }
-                // 创建消息链
-//                MessageChain chain = new MessageChainBuilder()
-//                        .append(image)
-//                        .append(new PlainText("\n歌曲ID：" + num))
-//                        .append(new PlainText("\n歌曲名：" + MusicInfo.name))
-//                        .append(new PlainText("\n音频链接：" + MusicInfo.Audio))
-//                        .build();
-//                contact.sendMessage(chain);
-                contact.sendMessage(image+"\n歌曲ID：" + num +
-                        "\n歌曲名：" + MusicInfo.name +
-                        "\n音频链接：" + MusicInfo.Audio);
-            }).build();
+//    @DeclaredCommand("获取歌曲信息")
+//    public static final ArgsCommand getMusicInfo = new ArgsCommandBuilder()
+//            .prefix("获取歌曲信息", "查歌")
+//            .form(ArgsCommand.CHAR)
+//            .onCall(Scope.GROUP, (event, contact, qq, args) -> {
+//                if (args == null) return;
+//                //后跟官谱id
+//                long num = Long.parseLong(args[0]);
+//                File imageFile = new File(configPath + "Images/Cover/OfficialImage/" + num + ".jpg");
+//                Image image = null;
+//                try (ExternalResource resource = ExternalResource.create(imageFile)) {
+//                    image = contact.uploadImage(resource);
+//                } catch (IOException e) {
+//                    System.out.println("Failed to upload image: " + e.getMessage());
+//                }
+//                if (MusicInfo.id == -1) {
+//                    contact.sendMessage("没有找到这首歌诶...");
+//                    return;
+//                }
+//                // 创建消息链
+////                MessageChain chain = new MessageChainBuilder()
+////                        .append(image)
+////                        .append(new PlainText("\n歌曲ID：" + num))
+////                        .append(new PlainText("\n歌曲名：" + MusicInfo.name))
+////                        .append(new PlainText("\n音频链接：" + MusicInfo.Audio))
+////                        .build();
+////                contact.sendMessage(chain);
+//                contact.sendMessage(image+"\n歌曲ID：" + num +
+//                        "\n歌曲名：" + MusicInfo.name +
+//                        "\n音频链接：" + MusicInfo.Audio);
+//            }).build();
 
     @DeclaredCommand("个人信息")
     public static final RegexCommand msgUserInfo = new RegexCommandBuilder()

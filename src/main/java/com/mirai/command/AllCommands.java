@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import com.dancecube.info.MusicInfo;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -58,7 +59,7 @@ public class AllCommands {
     private static final BiConsumer<Contact, Long> onNoLoginCall = (contact, qq) ->
             contact.sendMessage("好像还没有登录诶(´。＿。｀)\n私信发送\"登录\"一起来玩吧！");
     private static final BiConsumer<Contact, Long> onInvalidCall = (contact, qq) ->
-            contact.sendMessage("小铃看到登录身份过期了💦\n重新私信登录恢复吧💦");
+            contact.sendMessage("小枫看到登录身份过期了💦\n重新私信登录恢复吧💦");
 
     @Deprecated
     public static Token defaultToken = Objects.requireNonNullElse(userTokensMap.get(0L), new Token(""));
@@ -137,7 +138,7 @@ public class AllCommands {
                 }
                 // 未登录检测
                 if(!userTokensMap.containsKey(qq)) {
-                    contact.sendMessage("舞小铃这没有过你的账号！");
+                    contact.sendMessage("舞小枫这没有过你的账号！");
                 } else {
                     userTokensMap.remove(qq);
                     contact.sendMessage("退出登录成功！");
@@ -282,12 +283,31 @@ public class AllCommands {
             .prefix("获取歌曲信息", "查歌")
             .form(ArgsCommand.CHAR)
             .onCall(Scope.GROUP, (event, contact, qq, args) -> {
-                if(args==null) return;
+                if (args == null) return;
                 //后跟官谱id
                 long num = Long.parseLong(args[0]);
-                String msg = "歌曲名：%s\n封面链接：%s"
-                        .formatted(MusicInfo.name, MusicInfo.Cover);
-                contact.sendMessage(msg);
+                File imageFile = new File(configPath + "Images/Cover/OfficialImage/" + num + ".jpg");
+                Image image = null;
+                try (ExternalResource resource = ExternalResource.create(imageFile)) {
+                    image = contact.uploadImage(resource);
+                } catch (IOException e) {
+                    System.out.println("Failed to upload image: " + e.getMessage());
+                }
+                if (MusicInfo.id == -1) {
+                    contact.sendMessage("没有找到这首歌诶...");
+                    return;
+                }
+                // 创建消息链
+//                MessageChain chain = new MessageChainBuilder()
+//                        .append(image)
+//                        .append(new PlainText("\n歌曲ID：" + num))
+//                        .append(new PlainText("\n歌曲名：" + MusicInfo.name))
+//                        .append(new PlainText("\n音频链接：" + MusicInfo.Audio))
+//                        .build();
+//                contact.sendMessage(chain);
+                contact.sendMessage(image+"\n歌曲ID：" + num +
+                        "\n歌曲名：" + MusicInfo.name +
+                        "\n音频链接：" + MusicInfo.Audio);
             }).build();
 
     @DeclaredCommand("个人信息")
@@ -298,8 +318,6 @@ public class AllCommands {
                 if(token == null) {
                     return;
                 }
-
-//                if(token.getUserId() == 660997) contact.sendMessage("😨我娶，迪神！");
 
                 InputStream inputStream = UserInfoImage.generate(token, token.getUserId());
                 if(inputStream != null) {
@@ -321,7 +339,7 @@ public class AllCommands {
                 int i = 0;
                 while(matcher.find() & ++i < 25) {
                     String code = matcher.group();
-                    contact.sendMessage("#%d 小铃在努力兑换 \"%s\" ...".formatted(i, code));
+                    contact.sendMessage("#%d 小枫在努力兑换 \"%s\" ...".formatted(i, code));
                     Response response = PlayerMusic.gainMusicByCode(token, code);
                     if(response == null) return;
                     if(response.code() == 200) {
@@ -400,7 +418,7 @@ public class AllCommands {
 
                 long num = Long.parseLong(args[0]);
                 Token token = getTokenOrDefault(contact, qq, (con, q) ->
-                        contact.sendMessage("小铃这登录身份过期了💦\n重新私信登录恢复吧💦"));
+                        contact.sendMessage("小枫这登录身份过期了💦\n重新私信登录恢复吧💦"));
                 if(token == null) {
 //                    contact.sendMessage("默认Token异常，请联系大铃！");
                     return;
@@ -413,7 +431,7 @@ public class AllCommands {
                 } else if(userTokensMap.containsKey(num) && num > 999_999) { //QQ
                     id = userTokensMap.get(num).getUserId();
                 } else {
-                    contact.sendMessage("唔...小铃好像不认识他");
+                    contact.sendMessage("唔...小枫好像不认识他");
                     return;
                 }
                 //发送图片
@@ -433,7 +451,7 @@ public class AllCommands {
                 Token token = getToken(contact, qq, onNoLoginCall, onInvalidCall);
                 if(token == null) return;
 
-                contact.sendMessage("小铃正在计算中,等一下下💦...");
+                contact.sendMessage("小枫正在计算中,等一下下💦...");
                 InputStream inputStream = UserRatioImage.generate(token);
                 Image image;
                 if(inputStream != null) {
@@ -473,10 +491,10 @@ public class AllCommands {
                     return;
                 }
                 if(index > allRecentList.size()) {
-                    contact.sendMessage("数字太大啦！小铃获取不到啦");
+                    contact.sendMessage("数字太大啦！小枫获取不到啦");
                     return;
                 }
-                contact.sendMessage("小铃正在计算中,等一下下💦...");
+                contact.sendMessage("小枫正在计算中,等一下下💦...");
                 RecentMusicInfo recentMusicInfo = allRecentList.get(index - 1);
 
                 InputStream inputStream = LastPlayImage.generate(token, recentMusicInfo);
@@ -545,7 +563,7 @@ public class AllCommands {
                         future = new CompletableFuture<>();
                     }
 
-                    contact.sendMessage("很棒，你不是一只猫娘！\n验证码已发出，请及时查收并直接发送给舞小铃");
+                    contact.sendMessage("很棒，你不是一只猫娘！\n验证码已发出，请及时查收并直接发送给舞小枫");
 
                     Token token;
                     while(true) {
@@ -586,7 +604,7 @@ public class AllCommands {
     @DeclaredCommand("登陆")
     public static final RegexCommand fakeLogin = new RegexCommandBuilder()
             .regex("登陆")
-            .onCall(Scope.USER, (event, contact, qq, args) -> contact.sendMessage("（生气）你当小铃飞机场啊！登陆登陆的...")).build();
+            .onCall(Scope.USER, (event, contact, qq, args) -> contact.sendMessage("（生气）你当小枫飞机场啊！登陆登陆的...")).build();
 
     @Deprecated
     @DeclaredCommand("添加指令")

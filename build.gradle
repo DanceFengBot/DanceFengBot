@@ -1,18 +1,14 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.7.21'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.21'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.0'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.0'
+
     id 'net.mamoe.mirai-console' version '2.16.0'
 }
 
-
-// group = 'com.mirai'
-// version = '0.1.0'
-group = 'com.mirai'
+group = 'com.DanceFengBot'
 def releaseTime() {
     return new Date().format("yyyyMMdd-HHmm",TimeZone.getTimeZone("GMT+08:00"))
 }
-version = 'build-'+releaseTime()
-
 sourceCompatibility = '17'
 targetCompatibility = '17'
 
@@ -21,20 +17,20 @@ mirai {
 }
 repositories {
     maven {
-      url 'https://maven.aliyun.com/repository/public/'
+        url 'https://maven.aliyun.com/repository/public/'
     }
     maven {
-      url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'
+        url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'
     }
     maven {
-      url 'https://maven.aliyun.com/repository/central'
+        url 'https://maven.aliyun.com/repository/central'
     }
     maven{
         url 'https://repo1.maven.org/maven2/'
     }
     mavenLocal()
     mavenCentral()
-  }
+}
 dependencies {
     implementation 'com.google.zxing:javase:3.5.1'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
@@ -49,4 +45,7 @@ dependencies {
     implementation 'com.mysql:mysql-connector-j:9.4.0'
     implementation 'com.google.zxing:core:3.5.1'
     implementation 'com.google.zxing:javase:3.5.1'
+    implementation 'junit:junit:4.13.1'
+    implementation 'junit:junit:4.13.1'
 }
+

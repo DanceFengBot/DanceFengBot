@@ -1,6 +1,3 @@
-# Personal
-DcConfig/
-JDK17/
 # User-specific stuff
 .idea/
 
@@ -12,7 +9,8 @@ JDK17/
 out/
 # mpeltonen/sbt-idea plugin
 .idea_modules/
-
+DcConfig/
+.run/
 # JIRA plugin
 atlassian-ide-plugin.xml
 
@@ -132,6 +130,3 @@ src/test/kotlin/RunTerminal.kt
 
 # Local Test Launch Point working directory
 /debug-sandbox
-/.lingma
-/src/main/java/com/mirai/event/MainHandler1.java
-/src/main/java/com/mirai/auth/

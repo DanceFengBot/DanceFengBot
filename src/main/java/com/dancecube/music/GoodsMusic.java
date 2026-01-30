@@ -1,4 +1,4 @@
-package com.dancecube.music;
+package com.DanceCube.music;
 
 import com.google.gson.annotations.SerializedName;
 import okhttp3.OkHttpClient;

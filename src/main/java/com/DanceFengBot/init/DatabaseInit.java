@@ -3,16 +3,14 @@ package com.DanceFengBot.init;
 import com.DanceFengBot.config.AbstractConfig;
 import com.Tools.DatabaseConnection;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
+import org.apache.commons.io.IOUtils;
+import org.apache.ibatis.jdbc.ScriptRunner;
 public class DatabaseInit {
     public static void init() {
         if (!DatabaseConnection.connect()) {
@@ -209,27 +207,32 @@ public class DatabaseInit {
      * 创建表
      */
     private static void createTable(Connection conn, String tableName) throws SQLException, IOException {
-        // 读取SQL脚本文件
-        String sqlScript = readSqlScript(AbstractConfig.configPath+"initTables.sql");
+        ScriptRunner runner = new ScriptRunner(conn);
+        runner.setAutoCommit(true);
+        runner.setStopOnError(true);
 
-        // 替换表名占位符
-        sqlScript = sqlScript.replace("%table_name%", tableName);
+        String path = AbstractConfig.configPath + "initTables.sql";
+        System.out.println("读取脚本文件: " + path);
 
-        try (Statement stmt = conn.createStatement()) {
-            // 执行SQL脚本（可能包含多个语句）
-            String[] sqlStatements = parseSqlScript(sqlScript);
+        // 规范化路径
+        File file = new File(path);
+        if (!file.exists()) {
+            // 尝试不同的路径格式
+            String altPath = path.replace("\\", "/").replace("//", "/");
+            file = new File(altPath);
+            System.out.println("尝试备用路径: " + altPath);
 
-            for (String sql : sqlStatements) {
-                if (sql.trim().length() > 0) {
-                    stmt.executeUpdate(sql);
-                }
+            if (!file.exists()) {
+                throw new FileNotFoundException("找不到SQL脚本文件: " + path);
             }
+        }
 
+        try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+            String script = IOUtils.toString(reader);
+            script = script.replace("%table_name%", tableName);
+
+            runner.runScript(new StringReader(script));
             System.out.println("表 " + tableName + " 创建成功");
-
-        } catch (SQLException e) {
-            System.err.println("创建表失败: " + e.getMessage());
-            throw e;
         }
     }
 

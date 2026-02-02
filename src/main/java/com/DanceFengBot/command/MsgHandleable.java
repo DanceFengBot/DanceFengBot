@@ -6,6 +6,7 @@ import net.mamoe.mirai.event.events.MessageEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * 消息处理接口
@@ -20,6 +21,6 @@ public interface MsgHandleable {
      * @param qq      消息发送者的QQ号
      * @param args    消息参数，传入{@code RegexCommand}对象或者没有参数时为null
      */
-    void handle(MessageEvent event, Contact contact, long qq, @Nullable String[] args) throws IOException;
+    void handle(MessageEvent event, Contact contact, long qq, @Nullable String[] args) throws IOException, SQLException;
 
 }

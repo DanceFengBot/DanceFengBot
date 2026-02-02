@@ -292,6 +292,7 @@ public class AllCommands {
                 } catch (IOException e) {
                     System.out.println("Failed to upload image: " + e.getMessage());
                 }
+                MusicInfo.getMusicInfo(num);
                 if (MusicInfo.id == -1) {
                     contact.sendMessage("没有找到这首歌诶...");
                     return;

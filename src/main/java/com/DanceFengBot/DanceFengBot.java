@@ -34,7 +34,7 @@ public final class DanceFengBot extends JavaPlugin {
 
     private DanceFengBot() {
         super(new JvmPluginDescriptionBuilder( // 必要属性
-                        "com.DanceRinBot.DanceRinBot", // id
+                        "com.DanceFengBot.DanceFengBot", // id
                         "1.2" // version
                 ).author("Lin,Jingsong2008") // 可选属性，可以不提供， 直接 build
                         .build()

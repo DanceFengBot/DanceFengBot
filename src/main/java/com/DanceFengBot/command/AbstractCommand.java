@@ -4,6 +4,7 @@ import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.event.events.MessageEvent;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashSet;
 
 public abstract class AbstractCommand {
@@ -17,7 +18,7 @@ public abstract class AbstractCommand {
 
 
 
-    public void onCall(Scope scope, MessageEvent event, Contact contact, long qq, String[] args) throws IOException {
+    public void onCall(Scope scope, MessageEvent event, Contact contact, long qq, String[] args) throws IOException, SQLException {
 
         //不同情况筛选
         if(scope==Scope.ADMIN) {

@@ -9,6 +9,7 @@ import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.MessageChain;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -34,7 +35,7 @@ public class PlainTextHandler {
      *
      * @param messageEvent 消息事件
      */
-    public static void accept(MessageEvent messageEvent) throws IOException {
+    public static void accept(MessageEvent messageEvent) throws IOException, SQLException {
         MessageChain messageChain = messageEvent.getMessage();
 
         String message;
@@ -90,7 +91,7 @@ public class PlainTextHandler {
     // }
 
     //含参指令
-    private static void runCommand(MessageEvent messageEvent, AbstractCommand command, String[] args) throws IOException {
+    private static void runCommand(MessageEvent messageEvent, AbstractCommand command, String[] args) throws IOException, SQLException {
 
         HashSet<Scope> scopes = command.getScopes(); //作用域
         long qq = messageEvent.getSender().getId(); // qq不为contact.getId()
@@ -112,7 +113,7 @@ public class PlainTextHandler {
     }
 
     // 无参指令（其实就是给上面的runCommand传了个args=null）
-    private static void runCommand(MessageEvent messageEvent, AbstractCommand command) throws IOException {
+    private static void runCommand(MessageEvent messageEvent, AbstractCommand command) throws IOException, SQLException {
         runCommand(messageEvent, command, null);
     }
 }

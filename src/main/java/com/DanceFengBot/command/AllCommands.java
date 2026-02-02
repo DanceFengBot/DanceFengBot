@@ -353,7 +353,7 @@ public class AllCommands {
 
     @DeclaredCommand("查找舞立方机台")
     public static final ArgsCommand msgMachineList = new ArgsCommandBuilder()
-            .prefix("查找舞立方", "查找", "查找机台", "舞立方")
+            .prefix("查找舞立方", "查找")
             .form(ArgsCommand.CHAR)
             .onCall(Scope.GROUP, (event, contact, qq, args) -> {
                 if(args == null) return;

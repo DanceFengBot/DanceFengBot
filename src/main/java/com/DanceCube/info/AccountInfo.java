@@ -29,7 +29,6 @@ public class AccountInfo {
         Call call = HttpUtil.httpApiCall("https://dancedemo.shenghuayule.com/Dance/api/User/GetAccountInfo?userId=" + token.getUserId(), Map.of("Authorization", token.getBearerToken()));
 
         try(Response response = call.execute()) {
-//            Response response = call.execute();
             accountInfoJson = response.body().string();
         } catch(IOException e) {
             throw new RuntimeException(e);

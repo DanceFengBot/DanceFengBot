@@ -155,60 +155,60 @@ public class AllCommands {
             .prefix("机台登录", "jt")
             .form(ArgsCommand.CHAR)
             .onCall(Scope.GLOBAL, (event, contact, qq, args) -> {
-                if(args == null) {
-                    contact.sendMessage("请在QQ扫码后复制链接\n格式：机台登录/jt (链接)");
-                }
-
+//                if(args == null) {
+//                    contact.sendMessage("请在QQ扫码后复制链接\n格式：机台登录/jt (链接)");
+//                }
+//
                 Token token = getToken(contact, qq, onNoLoginCall, onInvalidCall);
                 if(token == null) return;
-
-                if(args != null) {
-                    String link = args[0];
-                    try(Response response = Machine.qrLogin(token, link)) {
-                        if(response != null && response.code() == 200) {
-                            contact.sendMessage(new QuoteReply(event.getMessage()).plus("登录成功辣，快来出勤吧！"));
-                        } else {
-                            contact.sendMessage(new QuoteReply(event.getMessage()).plus("链接失效了，换一个试试看吧"));
-                        }
-                    }//401 404
-                }
-
 //
-//                MessageChain messageChain = event.getMessage();
-//                EventChannel<Event> channel = GlobalEventChannel.INSTANCE.parentScope(MiraiBot.INSTANCE)
-//                        .filter(ev -> ev instanceof MessageEvent && ((MessageEvent) ev).getSender().getId()==qq);
-//                CompletableFuture<MessageEvent> future = new CompletableFuture<>();
-//                channel.subscribeOnce(MessageEvent.class, future::complete);
-//
-//                contact.sendMessage(new QuoteReply(messageChain).plus(new PlainText("请在3分钟之内发送机台二维码图片！\n一定要清楚才好！")));
-//                SingleMessage message;
-//                try {
-//                    MessageChain nextMessage = future.get(3, TimeUnit.MINUTES).getMessage();
-//                    List<SingleMessage> messageList = nextMessage.stream().filter(m -> m instanceof PlainText).toList();
-//                    if(messageList.size()!=1) {
-//                        contact.sendMessage(new QuoteReply(nextMessage).plus(new PlainText("这个不是图片吧...重新发送“机台登录”吧")));
-//                    } else {  // 第一个信息
-//                        message = messageList.get(0);
-//                        String imageUrl = Image.queryUrl((Image) message);
-//                        String qrUrl = HttpUtil.qrDecodeTencent(imageUrl);
-//                        if(qrUrl==null) {  // 若扫码失败
-//                            contact.sendMessage(new QuoteReply((MessageChain) message).plus(new PlainText("没有扫出来！再试一次吧！")));
-//                            return;
+//                if(args != null) {
+//                    String link = args[0];
+//                    try(Response response = Machine.qrLogin(token, link)) {
+//                        if(response != null && response.code() == 200) {
+//                            contact.sendMessage(new QuoteReply(event.getMessage()).plus("登录成功辣，快来出勤吧！"));
+//                        } else {
+//                            contact.sendMessage(new QuoteReply(event.getMessage()).plus("链接失效了，换一个试试看吧"));
 //                        }
-//                        try(Response response = Machine.qrLogin(token, qrUrl)) {
-//                            if(response!=null && response.code()==200) {
-//                                contact.sendMessage("登录成功辣，快来出勤吧！");
-//                            } else {
-//                                contact.sendMessage("二维码失效了，换一个试试看吧");
-//                            }
-//                        }//401 404
-//                    }
-//                } catch(InterruptedException | ExecutionException e) {
-//                    e.printStackTrace();
-//                } catch(TimeoutException e) {
-//                    e.printStackTrace();
-//                    contact.sendMessage(new QuoteReply(messageChain).plus("超时啦，请重新发送吧~"));
+//                    }//401 404
 //                }
+
+//
+                MessageChain messageChain = event.getMessage();
+                EventChannel<Event> channel = GlobalEventChannel.INSTANCE.parentScope(DanceFengBot.INSTANCE)
+                        .filter(ev -> ev instanceof MessageEvent && ((MessageEvent) ev).getSender().getId()==qq);
+                CompletableFuture<MessageEvent> future = new CompletableFuture<>();
+                channel.subscribeOnce(MessageEvent.class, future::complete);
+
+                contact.sendMessage(new QuoteReply(messageChain).plus(new PlainText("请在3分钟之内发送机台二维码图片！\n一定要清楚才好！")));
+                SingleMessage message;
+                try {
+                    MessageChain nextMessage = future.get(3, TimeUnit.MINUTES).getMessage();
+                    List<SingleMessage> messageList = nextMessage.stream().filter(m -> m instanceof PlainText).toList();
+                    if(messageList.size()!=1) {
+                        contact.sendMessage(new QuoteReply(nextMessage).plus(new PlainText("这个不是图片吧...重新发送“机台登录”吧")));
+                    } else {  // 第一个信息
+                        message = messageList.get(0);
+                        String imageUrl = Image.queryUrl((Image) message);
+                        String qrUrl = HttpUtil.qrDecodeZXing(imageUrl);
+                        if(qrUrl==null) {  // 若扫码失败
+                            contact.sendMessage(new QuoteReply((MessageChain) message).plus(new PlainText("没有扫出来！再试一次吧！")));
+                            return;
+                        }
+                        try(Response response = Machine.qrLogin(token, qrUrl)) {
+                            if(response!=null && response.code()==200) {
+                                contact.sendMessage("登录成功辣，快来出勤吧！");
+                            } else {
+                                contact.sendMessage("二维码失效了，换一个试试看吧");
+                            }
+                        }//401 404
+                    }
+                } catch(InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                } catch(TimeoutException e) {
+                    e.printStackTrace();
+                    contact.sendMessage(new QuoteReply(messageChain).plus("超时啦，请重新发送吧~"));
+                }
             }).build();
 
     @DeclaredCommand("借号扫码登录")
@@ -243,7 +243,7 @@ public class AllCommands {
                     } else {  // 第一个信息
                         message = messageList.get(0);
                         String imageUrl = Image.queryUrl((Image) message);
-                        String qrUrl = HttpUtil.qrDecodeTencent(imageUrl);
+                        String qrUrl = HttpUtil.qrDecodeZXing(imageUrl);
                         if(qrUrl == null) {  // 若扫码失败
                             contact.sendMessage(new QuoteReply((MessageChain) message).plus(new PlainText("没有扫出来！再试一次吧！")));
                             return;
@@ -285,29 +285,19 @@ public class AllCommands {
                 if (args == null) return;
                 //后跟官谱id
                 long num = Long.parseLong(args[0]);
+                MusicInfo musicInfo = MusicInfo.get(num);
                 File imageFile = new File(configPath + "Images/Cover/OfficialImage/" + num + ".jpg");
-                Image image = null;
+                Image image;
                 try (ExternalResource resource = ExternalResource.create(imageFile)) {
                     image = contact.uploadImage(resource);
+                    if (MusicInfo.id == -1) {
+                        contact.sendMessage("没有找到这首歌诶...");
+                        return;
+                    }
+                    contact.sendMessage(image+ Objects.requireNonNull(MusicInfo.get(num)).toString());
                 } catch (IOException e) {
                     System.out.println("Failed to upload image: " + e.getMessage());
                 }
-                MusicInfo.getMusicInfo(num);
-                if (MusicInfo.id == -1) {
-                    contact.sendMessage("没有找到这首歌诶...");
-                    return;
-                }
-                // 创建消息链
-//                MessageChain chain = new MessageChainBuilder()
-//                        .append(image)
-//                        .append(new PlainText("\n歌曲ID：" + num))
-//                        .append(new PlainText("\n歌曲名：" + MusicInfo.name))
-//                        .append(new PlainText("\n音频链接：" + MusicInfo.Audio))
-//                        .build();
-//                contact.sendMessage(chain);
-                contact.sendMessage(image+"\n歌曲ID：" + num +
-                        "\n歌曲名：" + MusicInfo.name +
-                        "\n音频链接：" + MusicInfo.Audio);
             }).build();
 
     @DeclaredCommand("个人信息")

@@ -217,14 +217,7 @@ public class DatabaseInit {
         // 规范化路径
         File file = new File(path);
         if (!file.exists()) {
-            // 尝试不同的路径格式
-            String altPath = path.replace("\\", "/").replace("//", "/");
-            file = new File(altPath);
-            System.out.println("尝试备用路径: " + altPath);
-
-            if (!file.exists()) {
-                throw new FileNotFoundException("找不到SQL脚本文件: " + path);
-            }
+            throw new FileNotFoundException("找不到SQL脚本文件: " + path);
         }
 
         try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
@@ -234,26 +227,6 @@ public class DatabaseInit {
             runner.runScript(new StringReader(script));
             System.out.println("表 " + tableName + " 创建成功");
         }
-    }
-
-    private static String readSqlScript(String filename) throws IOException {
-        // 从类路径或文件系统读取SQL脚本
-        try (InputStream is = DatabaseInit.class.getClassLoader().getResourceAsStream(filename);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-
-            StringBuilder content = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
-            }
-            return content.toString();
-        }
-    }
-
-    private static String[] parseSqlScript(String sqlScript) {
-        // 简单的SQL语句分割（按分号分割）
-        // 注意：这种方法不支持分号在字符串或注释中的情况
-        return sqlScript.split(";\\s*");
     }
 
     public static void createInitMark() {

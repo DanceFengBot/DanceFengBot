@@ -157,7 +157,6 @@ public final class DanceFengBot extends JavaPlugin {
         }
         Logger.getGlobal().info(("刷新加载成功！共%d条".formatted(userTokensMap.size()) + sb));
     }
-
     public void consoleCommands(){
 
     }

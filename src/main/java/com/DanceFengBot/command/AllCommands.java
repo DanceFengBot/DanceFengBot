@@ -11,6 +11,7 @@ import com.DanceCube.ratio.RatioCalculator;
 import com.DanceCube.ratio.RecentMusicInfo;
 import com.DanceCube.token.Token;
 import com.DanceCube.token.TokenBuilder;
+import com.DanceCube.api.Ladder;
 import com.DanceFengBot.DanceFengBot;
 import com.DanceFengBot.config.UserConfigUtils;
 import com.Tools.HttpUtil;

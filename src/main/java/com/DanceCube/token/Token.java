@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class Token {
     private final int userId;
-    private String accessToken;
+    private static String accessToken;
     private String refreshToken;
     // 是否过期，并且无法刷新Token
     private boolean available = true;
@@ -30,7 +30,7 @@ public class Token {
         return accessToken;
     }
 
-    public String getBearerToken() {
+    public static String getBearerToken() {
         return "bearer " + accessToken;
     }
 

@@ -6,9 +6,11 @@ plugins {
 }
 
 group = 'com.DanceFengBot'
+
 def releaseTime() {
-    return new Date().format("yyyyMMdd-HHmm",TimeZone.getTimeZone("GMT+08:00"))
+    return new Date().format("yyyyMMdd-HHmmss",TimeZone.getTimeZone("GMT+08:00"))
 }
+version = "build-${releaseTime()}"
 sourceCompatibility = '17'
 targetCompatibility = '17'
 

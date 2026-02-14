@@ -46,6 +46,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.DanceFengBot.config.AbstractConfig.*;
 
@@ -150,67 +151,89 @@ public class AllCommands {
     @Deprecated
     @DeclaredCommand("舞立方机台登录")
     public static final ArgsCommand machineLogin = new ArgsCommandBuilder()
-            //Todo：扫不出来
-//            .multiStrings("机台登录")
             .prefix("机台登录", "jt")
             .form(ArgsCommand.CHAR)
             .onCall(Scope.GLOBAL, (event, contact, qq, args) -> {
-//                if(args == null) {
-//                    contact.sendMessage("请在QQ扫码后复制链接\n格式：机台登录/jt (链接)");
-//                }
-//
                 Token token = getToken(contact, qq, onNoLoginCall, onInvalidCall);
                 if(token == null) return;
-//
-//                if(args != null) {
-//                    String link = args[0];
-//                    try(Response response = Machine.qrLogin(token, link)) {
-//                        if(response != null && response.code() == 200) {
-//                            contact.sendMessage(new QuoteReply(event.getMessage()).plus("登录成功辣，快来出勤吧！"));
-//                        } else {
-//                            contact.sendMessage(new QuoteReply(event.getMessage()).plus("链接失效了，换一个试试看吧"));
-//                        }
-//                    }//401 404
-//                }
 
-//
                 MessageChain messageChain = event.getMessage();
                 EventChannel<Event> channel = GlobalEventChannel.INSTANCE.parentScope(DanceFengBot.INSTANCE)
                         .filter(ev -> ev instanceof MessageEvent && ((MessageEvent) ev).getSender().getId()==qq);
                 CompletableFuture<MessageEvent> future = new CompletableFuture<>();
                 channel.subscribeOnce(MessageEvent.class, future::complete);
 
-                contact.sendMessage(new QuoteReply(messageChain).plus(new PlainText("请在3分钟之内发送机台二维码图片！\n一定要清楚才好！")));
-                SingleMessage message;
+                contact.sendMessage(new QuoteReply(messageChain).plus(new PlainText("""
+                        请在3分钟之内发送机台二维码图片或在QQ扫码后复制链接！
+                        如果发送图片一定要清楚才好！
+                        如果发送链接请依照格式发送：机台登录/jt (链接)""")));
+
                 try {
-                    MessageChain nextMessage = future.get(3, TimeUnit.MINUTES).getMessage();
-                    List<SingleMessage> messageList = nextMessage.stream().filter(m -> m instanceof PlainText).toList();
-                    if(messageList.size()!=1) {
-                        contact.sendMessage(new QuoteReply(nextMessage).plus(new PlainText("这个不是图片吧...重新发送“机台登录”吧")));
-                    } else {  // 第一个信息
-                        message = messageList.get(0);
-                        String imageUrl = Image.queryUrl((Image) message);
+                    MessageEvent nextEvent = future.get(3, TimeUnit.MINUTES);
+                    MessageChain nextMessage = nextEvent.getMessage();
+
+                    // 检查是否为图片消息
+                    Image image = (Image) nextMessage.stream()
+                            .filter(m -> m instanceof Image)
+                            .findFirst()
+                            .orElse(null);
+
+                    if (image != null) {
+                        // 处理图片登录
+                        String imageUrl = Image.queryUrl(image);
                         String qrUrl = HttpUtil.qrDecodeZXing(imageUrl);
-                        if(qrUrl==null) {  // 若扫码失败
-                            contact.sendMessage(new QuoteReply((MessageChain) message).plus(new PlainText("没有扫出来！再试一次吧！")));
+
+                        if(qrUrl == null) {
+                            contact.sendMessage(new QuoteReply(nextMessage).plus(new PlainText("没有扫出来！再试一次吧！")));
                             return;
                         }
+
                         try(Response response = Machine.qrLogin(token, qrUrl)) {
-                            if(response!=null && response.code()==200) {
+                            if(response != null && response.code() == 200) {
                                 contact.sendMessage("登录成功辣，快来出勤吧！");
                             } else {
                                 contact.sendMessage("二维码失效了，换一个试试看吧");
                             }
-                        }//401 404
+                        }
+                    } else {
+                        // 处理文本链接登录
+                        List<SingleMessage> textMessages = nextMessage.stream()
+                                .filter(m -> m instanceof PlainText)
+                                .toList();
+
+                        if(textMessages.isEmpty()) {
+                            contact.sendMessage(new QuoteReply(nextMessage).plus(new PlainText("请发送图片或直接粘贴登录链接")));
+                            return;
+                        }
+
+                        // 合并所有文本消息作为链接
+                        String link = textMessages.stream()
+                                .map(m -> ((PlainText) m).getContent().toString())
+                                .collect(Collectors.joining())
+                                .trim();
+
+                        if(!link.startsWith("http")) {
+                            contact.sendMessage(new QuoteReply(nextMessage).plus(new PlainText("链接格式不正确，请发送以 http 开头的完整链接")));
+                            return;
+                        }
+
+                        try(Response response = Machine.qrLogin(token, link)) {
+                            if(response != null && response.code() == 200) {
+                                contact.sendMessage("登录成功辣，快来出勤吧！");
+                            } else {
+                                contact.sendMessage("链接已失效，换一个试试看吧");
+                            }
+                        }
                     }
+
                 } catch(InterruptedException | ExecutionException e) {
                     e.printStackTrace();
+                    contact.sendMessage(new QuoteReply(messageChain).plus("处理过程中出现错误，请重试"));
                 } catch(TimeoutException e) {
                     e.printStackTrace();
                     contact.sendMessage(new QuoteReply(messageChain).plus("超时啦，请重新发送吧~"));
                 }
             }).build();
-
     @DeclaredCommand("借号扫码登录")
     public static final ArgsCommand borrowMachineLogin = new ArgsCommandBuilder()
             .prefix("借号")
@@ -229,7 +252,7 @@ public class AllCommands {
                 }
 
                 MessageChain messageChain = event.getMessage();
-                EventChannel<Event> channel = GlobalEventChannel.INSTANCE.parentScope(DanceFengBot.INSTANCE);//.filter(getContactFilter(event));
+                EventChannel<Event> channel = GlobalEventChannel.INSTANCE.parentScope(DanceFengBot.INSTANCE);
                 CompletableFuture<MessageEvent> future = new CompletableFuture<>();
                 channel.subscribeOnce(MessageEvent.class, future::complete);
 
@@ -456,6 +479,16 @@ public class AllCommands {
                     }
                     contact.sendMessage(image);
                 }
+            }).build();
+
+    @DeclaredCommand("获取天梯数据")
+    public static final RegexCommand msgUserRank = new RegexCommandBuilder()
+            .multiStrings("获取天梯数据", "我的天梯", "查看天梯", "myrank")
+            .onCall(Scope.GLOBAL, (event, contact, qq, args) -> {
+                Token token = getToken(contact, qq, onNoLoginCall, onInvalidCall);
+                if(token == null) return;
+                contact.sendMessage("小枫正在获取中,等一下下💦...");
+                contact.sendMessage(Ladder.get(token).toString());
             }).build();
 
     @DeclaredCommand("成绩查询")

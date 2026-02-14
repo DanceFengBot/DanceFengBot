@@ -88,9 +88,7 @@ public final class DanceFengBot extends JavaPlugin {
         channel.subscribeAlways(MessageEvent.class, event -> {
             try {
                 MainHandler.eventCenter(event);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (SQLException e) {
+            } catch (IOException | SQLException e) {
                 throw new RuntimeException(e);
             }
         });

@@ -237,14 +237,16 @@ public class DatabaseInit {
                 ")";
         String insertDataSql = "INSERT INTO initmark (id, time) VALUES (?, ?) " +
                 "ON DUPLICATE KEY UPDATE id = VALUES(id)";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement createTablePstmt = conn.prepareStatement(createTableSql);
-             PreparedStatement insertDataPstmt = conn.prepareStatement(insertDataSql)) {
-            createTablePstmt.executeUpdate();
-            insertDataPstmt.setInt(1, 1);
-            insertDataPstmt.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            assert conn != null;
+            try (PreparedStatement createTablePstmt = conn.prepareStatement(createTableSql);
+                 PreparedStatement insertDataPstmt = conn.prepareStatement(insertDataSql)) {
+                createTablePstmt.executeUpdate();
+                insertDataPstmt.setInt(1, 1);
+                insertDataPstmt.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
 
-            insertDataPstmt.executeUpdate();
+                insertDataPstmt.executeUpdate();
+            }
         } catch (SQLException e) {
             System.err.println("创建初始化标记失败: " + e.getMessage());
         }

@@ -6,6 +6,7 @@ import com.DanceFengBot.event.MainHandler;
 import com.DanceFengBot.init.DatabaseInit;
 import com.DanceFengBot.init.InsertAudioDataInit;
 import com.DanceFengBot.init.InsertCoverDataInit;
+import com.DanceFengBot.init.CoverDownloadInit;
 import com.DanceFengBot.task.SchedulerTask;
 import com.Tools.DatabaseConnection;
 import net.mamoe.mirai.console.extension.PluginComponentStorage;
@@ -77,6 +78,11 @@ public final class DanceFengBot extends JavaPlugin {
             DatabaseInit.init();
             InsertCoverDataInit.init();
             InsertAudioDataInit.init();
+            try {
+                CoverDownloadInit.Downloader();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             DatabaseInit.createInitMark();
         }
         // Token刷新器

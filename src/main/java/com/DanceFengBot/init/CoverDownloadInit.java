@@ -53,28 +53,34 @@ public class CoverDownloadInit {
 
     private static void patcher() {
         try {
+            DatabaseConnection.connect();
             if (!DatabaseConnection.isConnected()) {
                 System.err.println("Database not connected. Please connect first.");
+                return;
             }
 
-            String query = "SELECT coverLink,id FROM `officialmusics` WHERE 1;"; // Replace with your actual table and column names
+            String query = "SELECT coverLink, id FROM `officialmusics` WHERE 1;";
             if (!DatabaseConnection.executeSql(query)) {
                 System.err.println("Failed to execute query.");
                 return;
             }
 
-            ResultSet resultSet = DatabaseConnection.executeResult;
-            while (resultSet.next()) {
-                musicId = resultSet.getLong("id");
-                coverUrl = resultSet.getString("coverLink");
+            try (ResultSet resultSet = DatabaseConnection.executeResult) {
+                while (resultSet.next()) {
+                    Long musicId = resultSet.getLong("id");
+                    String coverUrl = resultSet.getString("coverLink");
 
-                if (musicId != null && coverUrl != null) {
-
-                    coverUrls.add(coverUrl);
-                    coverIds.add(musicId);
-                    System.out.println("Added Cover URL: " + coverUrl);
-                } else {
-                    System.err.println("Invalid data: MusicID=" + musicId + ", Cover=" + coverUrl);
+                    if (musicId != null && coverUrl != null) {
+                        if (!coverIds.contains(musicId) && !coverUrls.contains(coverUrl)) {
+                            coverUrls.add(coverUrl);
+                            coverIds.add(musicId);
+                            System.out.println("Added Cover URL: " + coverUrl);
+                        } else {
+                            System.out.println("Duplicate data skipped: MusicID=" + musicId + ", Cover=" + coverUrl);
+                        }
+                    } else {
+                        System.err.println("Invalid data: MusicID=" + musicId + ", Cover=" + coverUrl);
+                    }
                 }
             }
         } catch (Exception e) {

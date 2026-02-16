@@ -1,6 +1,7 @@
 package com.DanceCube.image;
 
 
+import com.DanceCube.api.Ladder;
 import com.DanceCube.info.AccountInfo;
 import com.DanceCube.info.InfoStatus;
 import com.DanceCube.info.ReplyItem;
@@ -54,29 +55,35 @@ public class UserInfoImage {
         if(userInfo.getStatus()!=InfoStatus.PRIVATE) {
             String gold = "不可见";
             String playedTimes = "不可见";
+            String ladderScore = "不可见";
             if(token.getUserId()==id) {
                 ReplyItem replyItem;
                 AccountInfo accountInfo;
-
+                Ladder ladder;
                 // 异步获取个人信息
                 if(itIsAReeeeaaaalWindowsMark()) {
                     accountInfo = AccountInfo.get(token);
                     replyItem = ReplyItem.get(token);
+                    ladder = Ladder.get(token).isEmpty() ? null : Ladder.get(token).get(0);
                 } else {
                     try {
                         Future<ReplyItem> replyItemFuture = scheduler.async(() -> ReplyItem.get(token));
                         Future<AccountInfo> accountInfoFuture = scheduler.async(() -> AccountInfo.get(token));
+                        Future<Ladder> ladderFuture = scheduler.async(() -> Ladder.get(token).isEmpty() ? null : Ladder.get(token).get(0));
                         replyItem = replyItemFuture.get();
                         accountInfo = accountInfoFuture.get();
+                        ladder = ladderFuture.get();
                     } catch(ExecutionException | InterruptedException e) {
                         accountInfo = AccountInfo.get(token);
                         replyItem = ReplyItem.get(token);
+                        ladder = Ladder.get(token).isEmpty() ? null : Ladder.get(token).get(0);
                     }
                 }
 
                 gold = String.valueOf(accountInfo.getGold());
                 playedTimes = String.valueOf(replyItem.getPlayedTimes());
-
+                assert ladder != null;
+                ladderScore = String.valueOf(ladder.getLevelPoint());
 
             }
             drawer.drawText("%s\n\n战队：%s\n战力：%d\n金币：%s"
@@ -84,11 +91,11 @@ public class UserInfoImage {
                                     userInfo.getTeamName().equals("") ? "无" : userInfo.getTeamName(),
                                     userInfo.getLvRatio(),
                                     gold), 293, 137, effect)
-                    .drawText("积分：%s\n全连率：%.2f%%\n全国排名：%d\n游玩次数：%s"
+                    .drawText("积分：%s\n全连率：%.2f%%\n全国排名：%d\n游玩次数：%s\n天梯分：%s"
                             .formatted(userInfo.getMusicScore(),
                                     (float) userInfo.getComboPercent() / 100,
                                     userInfo.getRankNation(),
-                                    playedTimes), 106, 472, effect)
+                                    playedTimes,ladderScore), 106, 472, effect)
                     .font(font2)
                     .drawText("ID：" + userInfo.getUserID(), 293, 170);
         } else { //屏蔽
@@ -107,9 +114,9 @@ public class UserInfoImage {
 
     @Test
     public void test() {
-        Token token = new Token(5559326, "wiO19sIQ9FCc5KlQUatuMS9C_rFBWrQ9wMP2St2P6T25r_VJbhIb-dd3WmC_sqp67UD19UNyV5yCbF0bOYC9gezJzAKolxBL4wLBRbZAxKphndkxWmbcStWPZY_uuKzjg2k9tklJL6Pm-Alli7dOWStmt8ORu3UJMY7llVGkH-3ClMPwYzE3hgQuQr5QUDsh5wTZhN_Qi66Z3ClNKCs_E1lY_UMZsgSRIaNtVL3LVE6AKT6abRYha-iVSt4ILUIUPpBcyzTTPtFtQ1UMmp6LA_8C8UOGOSCMm9j4jaxCQpFd9r5eAizy1_Ls0BWu_4qsgXunH7mbdgX3OV2WEDpIs5nmDs6n1KstSWDDa-UcXzW8t5RzjCWRHqhhV355c4FZ");
-        String path = "N:\\Bots\\DcConfig\\Images\\UserInfoImage\\result.png";
-        ImageDrawer.write(generate(token, 939088), path);
+        Token token = new Token(5559326, "UlV1eztePPP2RXJZthbH6H2fTg94xm7tscLNAediVS3xgKJFRF6Sk-G9N4cz8bs4AvU-D-uuRTDSBKd-lxshMQViiwPA44xcn1IcKPTILNcBphqJjKOdcciIQtxtSS5sbhLRWVCl4-LdEHu9dcQ9a6Lq4liZpIf1sAeqdcq-PlSFV4xn6nPPl5M_dr_gKpM1xnQI1YfWTI_qE7HIa5JM9MIiHE3C33ZoRV3ls5htsq4AKjTdTpmoUgfdOhwDicuKz8D0r_7LZjVzxQw0OWyiWumiiXg6Bkfy6Ha7UUZAffgLO17vzRdPvCPnra0UNasOcljt8N8DnvvEjSfmz38lvMsqU4d14JfGR5y9qhcCRDUtJ372Jvyed0LgWhC0G-FJ");
+        String path = "I:\\Bots\\DcConfig\\Images\\UserInfoImage\\result.png";
+        ImageDrawer.write(generate(token, 5559326), path);
     }
 }
 

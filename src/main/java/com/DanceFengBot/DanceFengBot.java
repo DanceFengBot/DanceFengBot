@@ -90,6 +90,7 @@ public final class DanceFengBot extends JavaPlugin {
         // 每月15日新歌
         SchedulerTask.addNewMusicCover();
         SchedulerTask.addNewMusicAudio();
+        SchedulerTask.downloadNewMusicCover();
         // 监听器
         channel.subscribeAlways(MessageEvent.class, event -> {
             try {

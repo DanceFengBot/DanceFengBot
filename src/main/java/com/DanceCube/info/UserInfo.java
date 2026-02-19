@@ -26,7 +26,7 @@ public class UserInfo {
     private String titleUrl; //头衔
     private String headimgBoxPath; //头像框
     private InfoStatus status = InfoStatus.OPEN;
-
+    private static int rank; //当前赛季所在段位
 
     public int getUserID() {
         return userID;
@@ -83,7 +83,6 @@ public class UserInfo {
     public InfoStatus getStatus() {
         return status;
     }
-
     public void setStatus(InfoStatus status) {
         this.status = status;
     }
@@ -177,6 +176,7 @@ public class UserInfo {
         userInfo = gson.fromJson(userInfoJson, UserInfo.class);
         return userInfo;
     }
+
 
     @Override
     public String toString() {

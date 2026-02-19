@@ -28,13 +28,13 @@ public class UserInfoImage {
      * @param token 发起查看信息的用户
      * @param id    需要查看的信息目标
      */
+
     public static InputStream generate(Token token, int id) {
         String bgPath = "file:" + configPath + "Images/UserInfoImage/Background2.png";
 
         UserInfo userInfo = UserInfo.get(token, id);
         // 不存在查询的id
         if(userInfo.getStatus()==InfoStatus.NONEXISTENT) return null;
-
         //不存在用户
         if(userInfo.getHeadimgURL()==null) return null;
 
@@ -56,6 +56,7 @@ public class UserInfoImage {
             String gold = "不可见";
             String playedTimes = "不可见";
             String ladderScore = "不可见";
+            int ladderRank = 0;
             if(token.getUserId()==id) {
                 ReplyItem replyItem;
                 AccountInfo accountInfo;
@@ -84,8 +85,9 @@ public class UserInfoImage {
                 playedTimes = String.valueOf(replyItem.getPlayedTimes());
                 assert ladder != null;
                 ladderScore = String.valueOf(ladder.getLevelPoint());
-
+                ladderRank = ladder.getLevelGrade();
             }
+            drawer.drawImage(ImageDrawer.read(rankIcon(ladderRank)), 125, 301, 137, 93);
             drawer.drawText("%s\n\n战队：%s\n战力：%d\n金币：%s"
                             .formatted(userInfo.getUserName(),
                                     userInfo.getTeamName().equals("") ? "无" : userInfo.getTeamName(),
@@ -111,7 +113,26 @@ public class UserInfoImage {
         drawer.dispose();
         return drawer.getImageStream("PNG");
     }
-
+    public static String rankIcon(int rank){
+        if (rank == 0){
+            return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge0.png";
+        } else if (rank == 1) {
+            return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge1.png";
+        } else if (rank == 2) {
+            return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge2.png";
+        } else if (rank == 3) {
+            return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge3.png";
+        } else if (rank == 4) {
+            return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge4.png";
+        } else if (rank == 5) {
+            return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge5.png";
+        } else if (rank == 6) {
+            return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge6.png";
+        } else if (rank == 7) {
+            return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge7.png";
+        }
+        return null;
+    }
     @Test
     public void test() {
         Token token = new Token(5559326, "UlV1eztePPP2RXJZthbH6H2fTg94xm7tscLNAediVS3xgKJFRF6Sk-G9N4cz8bs4AvU-D-uuRTDSBKd-lxshMQViiwPA44xcn1IcKPTILNcBphqJjKOdcciIQtxtSS5sbhLRWVCl4-LdEHu9dcQ9a6Lq4liZpIf1sAeqdcq-PlSFV4xn6nPPl5M_dr_gKpM1xnQI1YfWTI_qE7HIa5JM9MIiHE3C33ZoRV3ls5htsq4AKjTdTpmoUgfdOhwDicuKz8D0r_7LZjVzxQw0OWyiWumiiXg6Bkfy6Ha7UUZAffgLO17vzRdPvCPnra0UNasOcljt8N8DnvvEjSfmz38lvMsqU4d14JfGR5y9qhcCRDUtJ372Jvyed0LgWhC0G-FJ");

@@ -38,7 +38,7 @@ public class AddNewMusicCoverJob implements Job {
      * 执行补丁任务
      */
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        System.out.println("开始爬取最新歌曲...");
+        System.out.println("开始爬取最新歌曲封面...");
 
         try {
             // 连接数据库

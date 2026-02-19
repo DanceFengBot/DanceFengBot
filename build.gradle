@@ -27,9 +27,6 @@ repositories {
     maven {
         url 'https://maven.aliyun.com/repository/central'
     }
-    maven{
-        url 'https://repo1.maven.org/maven2/'
-    }
     mavenLocal()
     mavenCentral()
 }

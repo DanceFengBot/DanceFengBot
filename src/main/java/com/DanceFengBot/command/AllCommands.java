@@ -482,15 +482,15 @@ public class AllCommands {
                 }
             }).build();
 
-    @DeclaredCommand("获取天梯数据")
-    public static final RegexCommand msgUserRank = new RegexCommandBuilder()
-            .multiStrings("获取天梯数据", "我的天梯", "查看天梯", "myrank")
-            .onCall(Scope.GLOBAL, (event, contact, qq, args) -> {
-                Token token = getToken(contact, qq, onNoLoginCall, onInvalidCall);
-                if(token == null) return;
-                contact.sendMessage("小枫正在获取中,等一下下💦...");
-                contact.sendMessage(Ladder.get(token).toString());
-            }).build();
+//    @DeclaredCommand("获取天梯数据")
+//    public static final RegexCommand msgUserRank = new RegexCommandBuilder()
+//            .multiStrings("获取天梯数据", "我的天梯", "查看天梯", "myrank")
+//            .onCall(Scope.GLOBAL, (event, contact, qq, args) -> {
+//                Token token = getToken(contact, qq, onNoLoginCall, onInvalidCall);
+//                if(token == null) return;
+//                contact.sendMessage("小枫正在获取中,等一下下💦...");
+//                contact.sendMessage(Ladder.get().toString());
+//            }).build();
 
     @DeclaredCommand("成绩查询")
     public static final ArgsCommand msgUserPlayed = new ArgsCommandBuilder()

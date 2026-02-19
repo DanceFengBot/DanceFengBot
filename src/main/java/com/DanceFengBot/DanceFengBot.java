@@ -53,38 +53,38 @@ public final class DanceFengBot extends JavaPlugin {
         getLogger().info("Plugin loaded!");
 
         // 连接数据库（在加载Token之前先连接数据库）
-        try {
-            if (!DatabaseConnection.connect()) {
-                getLogger().error("数据库连接失败，插件将关闭！");
-                onDisable(); // 关闭插件
-                return; // 提前返回，不再执行后续初始化
-            }
-            getLogger().info("数据库连接成功！");
-        } catch (Exception e) {
-            getLogger().error("数据库连接异常: " + e.getMessage());
-            onDisable();
-            return;
-        }
+//        try {
+//            if (!DatabaseConnection.connect()) {
+//                getLogger().error("数据库连接失败，插件将关闭！");
+//                onDisable(); // 关闭插件
+//                return; // 提前返回，不再执行后续初始化
+//            }
+//            getLogger().info("数据库连接成功！");
+//        } catch (Exception e) {
+//            getLogger().error("数据库连接异常: " + e.getMessage());
+//            onDisable();
+//            return;
+//        }
         EventChannel<Event> channel = GlobalEventChannel.INSTANCE
                 .parentScope(DanceFengBot.INSTANCE)
                 .context(this.getCoroutineContext());
         // 输出加载Token
         onLoadToken();
         // 初始化
-        if (DatabaseInit.checkInitMark()){
-            getLogger().info("数据库已初始化，无需重复初始化");
-            return;
-        } else {
-            DatabaseInit.init();
-            InsertCoverDataInit.init();
-            InsertAudioDataInit.init();
-            try {
-                CoverDownloadInit.Downloader();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            DatabaseInit.createInitMark();
-        }
+//        if (DatabaseInit.checkInitMark()){
+//            getLogger().info("数据库已初始化，无需重复初始化");
+//            return;
+//        } else {
+//            DatabaseInit.init();
+//            InsertCoverDataInit.init();
+//            InsertAudioDataInit.init();
+//            try {
+//                CoverDownloadInit.Downloader();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            DatabaseInit.createInitMark();
+//        }
         // Token刷新器
         SchedulerTask.autoRefreshToken();
         // 每月15日新歌
@@ -108,10 +108,6 @@ public final class DanceFengBot extends JavaPlugin {
         // 保存Tokens
         TokenBuilder.tokensToFile(userTokensMap, configPath + "UserTokens.json");
         System.out.printf("保存成功！共%d条%n", userTokensMap.size());
-
-        // 断开数据库连接
-        DatabaseConnection.disconnect();
-        getLogger().info("数据库连接已关闭");
     }
 
     @Deprecated

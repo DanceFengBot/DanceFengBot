@@ -65,19 +65,19 @@ public class UserInfoImage {
                 if(itIsAReeeeaaaalWindowsMark()) {
                     accountInfo = AccountInfo.get(token);
                     replyItem = ReplyItem.get(token);
-                    ladder = Ladder.get(token).isEmpty() ? null : Ladder.get(token).get(0);
+                    ladder = Ladder.get().isEmpty() ? null : Ladder.get().get(0);
                 } else {
                     try {
                         Future<ReplyItem> replyItemFuture = scheduler.async(() -> ReplyItem.get(token));
                         Future<AccountInfo> accountInfoFuture = scheduler.async(() -> AccountInfo.get(token));
-                        Future<Ladder> ladderFuture = scheduler.async(() -> Ladder.get(token).isEmpty() ? null : Ladder.get(token).get(0));
+                        Future<Ladder> ladderFuture = scheduler.async(() -> Ladder.get().isEmpty() ? null : Ladder.get().get(0));
                         replyItem = replyItemFuture.get();
                         accountInfo = accountInfoFuture.get();
                         ladder = ladderFuture.get();
                     } catch(ExecutionException | InterruptedException e) {
                         accountInfo = AccountInfo.get(token);
                         replyItem = ReplyItem.get(token);
-                        ladder = Ladder.get(token).isEmpty() ? null : Ladder.get(token).get(0);
+                        ladder = Ladder.get().isEmpty() ? null : Ladder.get().get(0);
                     }
                 }
 
@@ -114,19 +114,19 @@ public class UserInfoImage {
         return drawer.getImageStream("PNG");
     }
     public static String rankIcon(int rank){
-        if (rank == 0){
+        if (rank == 0){ //无
             return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge0.png";
-        } else if (rank == 1) {
+        } else if (rank == 1) { //一星
             return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge1.png";
-        } else if (rank == 2) {
+        } else if (rank == 2) { //二星
             return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge2.png";
-        } else if (rank == 3) {
+        } else if (rank == 3) { //三星
             return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge3.png";
-        } else if (rank == 4) {
+        } else if (rank == 4) { //星钻
             return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge4.png";
-        } else if (rank == 5) {
+        } else if (rank == 5) { //表神
             return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge5.png";
-        } else if (rank == 6) {
+        } else if (rank == 6) { //里神
             return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge6.png";
         } else if (rank == 7) {
             return "http://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge7.png";

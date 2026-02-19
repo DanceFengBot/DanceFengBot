@@ -24,7 +24,7 @@ public class Ladder {
     private boolean isCurrent; // 是否当前赛季
     private boolean isTopest; // 是否历史最高
 
-    public static List<Ladder> get(Token token) {
+    public static List<Ladder> get() {
         Call call = HttpUtil.httpApiCall(
                 "https://dancedemo.shenghuayule.com/Dance/api/Match/GetQuanMinSeasons",
                 Map.of("Authorization", Token.getBearerToken())

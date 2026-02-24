@@ -3,16 +3,11 @@ package com.DanceFengBot;
 import com.DanceCube.token.Token;
 import com.DanceCube.token.TokenBuilder;
 import com.DanceFengBot.event.MainHandler;
-import com.DanceFengBot.init.DatabaseInit;
-import com.DanceFengBot.init.InsertAudioDataInit;
-import com.DanceFengBot.init.InsertCoverDataInit;
-import com.DanceFengBot.init.CoverDownloadInit;
 import com.DanceFengBot.task.SchedulerTask;
-import com.Tools.DatabaseConnection;
+import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
 import net.mamoe.mirai.console.extension.PluginComponentStorage;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JavaPluginScheduler;
-import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
 import net.mamoe.mirai.event.Event;
 import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.GlobalEventChannel;
@@ -21,12 +16,9 @@ import net.mamoe.mirai.event.events.NewFriendRequestEvent;
 import net.mamoe.mirai.event.events.NudgeEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
-
 import static com.DanceFengBot.config.AbstractConfig.configPath;
 import static com.DanceFengBot.config.AbstractConfig.userTokensMap;
 
@@ -52,53 +44,16 @@ public final class DanceFengBot extends JavaPlugin {
     public void onEnable() {
         getLogger().info("Plugin loaded!");
 
-        // 连接数据库（在加载Token之前先连接数据库）
-//        try {
-//            if (!DatabaseConnection.connect()) {
-//                getLogger().error("数据库连接失败，插件将关闭！");
-//                onDisable(); // 关闭插件
-//                return; // 提前返回，不再执行后续初始化
-//            }
-//            getLogger().info("数据库连接成功！");
-//        } catch (Exception e) {
-//            getLogger().error("数据库连接异常: " + e.getMessage());
-//            onDisable();
-//            return;
-//        }
         EventChannel<Event> channel = GlobalEventChannel.INSTANCE
                 .parentScope(DanceFengBot.INSTANCE)
                 .context(this.getCoroutineContext());
         // 输出加载Token
         onLoadToken();
-        // 初始化
-//        if (DatabaseInit.checkInitMark()){
-//            getLogger().info("数据库已初始化，无需重复初始化");
-//            return;
-//        } else {
-//            DatabaseInit.init();
-//            InsertCoverDataInit.init();
-//            InsertAudioDataInit.init();
-//            try {
-//                CoverDownloadInit.Downloader();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//            DatabaseInit.createInitMark();
-//        }
         // Token刷新器
         SchedulerTask.autoRefreshToken();
-        // 每月15日新歌
-        SchedulerTask.addNewMusicCover();
-        SchedulerTask.addNewMusicAudio();
-        SchedulerTask.downloadNewMusicCover();
+
         // 监听器
-        channel.subscribeAlways(MessageEvent.class, event -> {
-            try {
-                MainHandler.eventCenter(event);
-            } catch (IOException | SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        channel.subscribeAlways(MessageEvent.class, MainHandler::eventCenter);
         channel.subscribeAlways(NudgeEvent.class, MainHandler::NudgeHandler);
         channel.subscribeAlways(NewFriendRequestEvent.class, MainHandler::addFriendHandler);
     }
@@ -158,6 +113,7 @@ public final class DanceFengBot extends JavaPlugin {
         }
         Logger.getGlobal().info(("刷新加载成功！共%d条".formatted(userTokensMap.size()) + sb));
     }
+
     public void consoleCommands(){
 
     }

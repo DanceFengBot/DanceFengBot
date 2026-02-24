@@ -14,9 +14,6 @@ import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.PlainText;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import static com.DanceFengBot.config.AbstractConfig.configPath;
 import static com.DanceFengBot.config.AbstractConfig.userTokensMap;
 
@@ -24,7 +21,7 @@ import static com.DanceFengBot.config.AbstractConfig.userTokensMap;
 public class MainHandler {
 
     @EventHandler
-    public static void eventCenter(MessageEvent event) throws IOException, SQLException {
+    public static void eventCenter(MessageEvent event) {
         MessageChain messageChain = event.getMessage();
         if(messageChain.size() - 1==messageChain.stream()
                 .filter(msg -> msg instanceof At | msg instanceof PlainText)

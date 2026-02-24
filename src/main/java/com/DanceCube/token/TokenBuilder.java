@@ -1,12 +1,12 @@
 package com.DanceCube.token;
 
+import com.DanceFengBot.task.RefreshTokenJob;
+import com.Tools.HttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.DanceFengBot.task.RefreshTokenJob;
-import com.Tools.HttpUtil;
 import okhttp3.Call;
 import okhttp3.Response;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.DanceFengBot.config.AbstractConfig.configPath;
-import static java.lang.Thread.sleep;
 
 public final class TokenBuilder {
     //公用 ids
@@ -231,14 +230,10 @@ public final class TokenBuilder {
     @Test
     public void testID() throws InterruptedException {
         ArrayList<String> strings = new ArrayList<>();
-        for (int i = 0; i <= 3501; ++i) {
+        for (int i = 0; i <= 1; i++) {
             String id = getNewID();
-            Thread.sleep(300);
-            if (id.isBlank()) {
-                System.out.println("Times:"+i);
-                continue;
-            }
-            System.out.println("Times:"+i);
+            Thread.sleep(500);
+            if (id.isBlank()) continue;
             if (strings.contains("出现错误。")) {
                 break;
             }

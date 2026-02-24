@@ -56,7 +56,6 @@ public class ReplyItem {
         return victoryRates;
     }
 
-
     public float getTeamVictoryRates() {
         return teamVictoryRates;
     }
@@ -83,13 +82,15 @@ public class ReplyItem {
 
     @Override
     public String toString() {
-        return "对战胜率：" + victoryRates + "%\n" +
-                "战队赛胜率：" + teamVictoryRates +"%\n" +
-                "舞龄：" + playedAge +"\n" +
-                "段位：" + danLevel +"段\n" +
-                "游玩次数：" + playedTimes +"\n" +
-                "通关歌曲：" + passedSongs +"\n" +
-                "新增金币：" + addedCoins;
+        return "ReplyItem{" +
+                "victoryRates=" + victoryRates +
+                ", teamVictoryRates=" + teamVictoryRates +
+                ", playedAge='" + playedAge + '\'' +
+                ", danLevel=" + danLevel +
+                ", playedTimes=" + playedTimes +
+                ", passedSongs=" + passedSongs +
+                ", addedCoins=" + addedCoins +
+                '}';
     }
 
 }

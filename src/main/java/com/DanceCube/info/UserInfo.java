@@ -8,6 +8,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import com.DanceCube.info.InfoStatus;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -23,7 +25,7 @@ public class UserInfo {
     private String phone; //手机号
     private String cityName; //城市名
     private String teamName; //战队名
-    private String titleUrl; //头衔
+    private String titleUrl; //称号
     private String headimgBoxPath; //头像框
     private InfoStatus status = InfoStatus.OPEN;
 
@@ -73,7 +75,14 @@ public class UserInfo {
     }
 
     public String getTitleUrl() {
-        return titleUrl==null || titleUrl.length()<5 ? "" : titleUrl;
+        if (titleUrl == null || titleUrl.length() < 5) {
+            return "";
+        }
+        String suffix = "/256";
+        if (titleUrl.endsWith(suffix)) {
+            return titleUrl.substring(0, titleUrl.length() - suffix.length());
+        }
+        return titleUrl;
     }
 
     public String getHeadimgBoxPath() {

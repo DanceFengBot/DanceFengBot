@@ -1,5 +1,6 @@
 package com.DanceCube.image;
 
+import com.DanceCube.api.Ladder;
 import com.DanceCube.api.LvRatioHistory;
 import com.DanceCube.info.UserInfo;
 import com.DanceCube.music.CoverUtil;
@@ -20,7 +21,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -91,7 +91,8 @@ public class UserRatioImage {
             if(info==null) {
                 System.err.println("# 战力分析时个人信息获取失败");
             }
-
+            Ladder ladder = Ladder.get(token).stream().filter(Ladder::isCurrent).findFirst().orElse(null);
+            int rank = ladder != null && ladder.isCurrent() ? ladder.getLevelGrade() : -1;
             // 获取背景图片
             CompletableFuture<BufferedImage> backgroundImgFuture = CompletableFuture.supplyAsync(() -> {
                 try {
@@ -102,46 +103,35 @@ public class UserRatioImage {
                 }
             });
 
-            // 个人信息 头像/头像框/头衔  异步获取
-            CompletableFuture<BufferedImage> avatarFuture = CompletableFuture.supplyAsync(() -> {
-                try {
-                    if(finalInfo.getHeadimgURL().isEmpty()) return null;
-                    return ImageIO.read(new URL(finalInfo.getHeadimgURL()));
-                } catch(IOException e) {
-                    return null;
-                }
-            });
-
-            CompletableFuture<BufferedImage> boxFuture = CompletableFuture.supplyAsync(() -> {
-                try {
-                    if(finalInfo.getHeadimgBoxPath().isEmpty()) return null;
-                    return ImageIO.read(new URL(finalInfo.getHeadimgBoxPath()));
-                } catch(IOException e) {
-                    return null;
-                }
-            });
-
-            CompletableFuture<BufferedImage> titleFuture = CompletableFuture.supplyAsync(() -> {
-                if(finalInfo.getTitleUrl().isEmpty()) return null;
-                try {
-                    return ImageIO.read(new URL(finalInfo.getTitleUrl()));
-                } catch(IOException e) {
-                    return null;
-                }
-            });
-
             //异步阻塞完绘制战力图
             drawer = new ImageDrawer(backgroundImgFuture.get());
             drawer.setAntiAliasing(); // 抗锯齿
-
-            CompletableFuture.allOf(avatarFuture, boxFuture, titleFuture).join();
-            if(avatarFuture.get()!=null) drawer.drawImage(avatarFuture.get(), 34, 180, 174, 174);
-            if(boxFuture.get()!=null) drawer.drawImage(boxFuture.get(), -24, 122, 290, 290);
-            if(titleFuture.get()!=null) drawer.drawImage(titleFuture.get(), 28, 373, 186, 79);
+            
+//            CompletableFuture.allOf(avatarFuture, boxFuture, titleFuture).join();
+            assert finalInfo != null;
+            drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgURL()), 34, 180, 174, 174);
+            drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgBoxPath()), -24, 122, 290, 290);
+            drawer.drawImage(ImageDrawer.read(finalInfo.getTitleUrl()), 13, 373, 230, 79);
+            if(rank == 0){
+                drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge0.png"), -60, 122, 183, 120);
+            }else if(rank == 1) {
+                drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge1.png"), -60, 122, 183, 120);
+            } else if(rank == 2){
+                drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge2.png"), -60, 122, 183, 120);
+            } else if(rank == 3){
+                drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge3.png"), -60, 122, 183, 120);
+            } else if(rank == 4){
+                drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge5.png"), -60, 122, 183, 120);
+            } else if(rank == 5){
+                drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge6.png"), -60, 122, 183, 120);
+            } else if(rank == 6){
+                drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge7.png"), -60, 122, 183, 120);
+            }
         } catch(InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
 
+        assert info != null;
         int lvRatio = info.getLvRatio();
         String userInfoText = """
                 %s
@@ -332,10 +322,6 @@ public class UserRatioImage {
         };
     }
 
-    public static float deltaSeconds(long mills) {
-        return (float) (System.currentTimeMillis() - mills) / 1000;
-    }
-
     //常量放在这里我有病（
     public static final String[] RATIO_COMMENTS = {
             //   连1145的战力都没有
@@ -366,8 +352,9 @@ public class UserRatioImage {
     @Test
     public void test() throws IOException {
         System.out.println("Running...");
-        Token token = new Token(5559326, "wiO19sIQ9FCc5KlQUatuMS9C_rFBWrQ9wMP2St2P6T25r_VJbhIb-dd3WmC_sqp67UD19UNyV5yCbF0bOYC9gezJzAKolxBL4wLBRbZAxKphndkxWmbcStWPZY_uuKzjg2k9tklJL6Pm-Alli7dOWStmt8ORu3UJMY7llVGkH-3ClMPwYzE3hgQuQr5QUDsh5wTZhN_Qi66Z3ClNKCs_E1lY_UMZsgSRIaNtVL3LVE6AKT6abRYha-iVSt4ILUIUPpBcyzTTPtFtQ1UMmp6LA_8C8UOGOSCMm9j4jaxCQpFd9r5eAizy1_Ls0BWu_4qsgXunH7mbdgX3OV2WEDpIs5nmDs6n1KstSWDDa-UcXzW8t5RzjCWRHqhhV355c4FZ");
-        String path = "C:\\Users\\Administrator\\IdeaProjects\\dcbot\\DcConfig\\Images\\result.png";
+        Token token = new Token(5559326,
+                "pyBCTjsQXbcCJa2GpqA92HT7AUaixAuztdu7G61LvE7wsrB2gzS3yZ34z7wU5uBT-M5w2yf5_6NB_Ik7TpUv_kWezGUhfpxzTaHk8iT3wGpQQsdiUresZxe30piSuJe7meFEwHB0jDhxq07patSpK_WDCUDue3Sl4QKlVDl2hY-JQ7KP9xXqysoyUvi1Aj0iR1I9NyWQGl7fUWa8Ko9kOAlnGNqJGDXT2PX8s3qXPC88s0ZKN9bhIFaCk6-7Ivxtx6nemzdPN-TrPfr9M7Sbok2cgCiq-GJmUJ_AHqYQG3DAbAN19bbtjtXWjz5_D21DaHduGPCBF9WZRYBOdduT4f4WJSrBe6TNLAd10sSDWxiQ0nGAFXRFpovKpORjr6_Z");
+        String path = "C:\\Users\\Administrator\\IdeaProjects\\DanceFengBot\\result.png";
 
         InputStream image = generate(token);
         Thumbnails.of(image)

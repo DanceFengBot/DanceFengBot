@@ -33,8 +33,11 @@ public class UserInfoImage {
         String bgPath = "file:" + configPath + "Images/UserInfoImage/Background2.png";
 
         UserInfo userInfo = UserInfo.get(token, id);
-        Ladder ladder = Ladder.get(token).stream().filter(Ladder::isCurrent).findFirst().orElse(null);
-        int rank = ladder != null && ladder.isCurrent() ? ladder.getLevelGrade() : -1;
+        Ladder ladder = Ladder.get(token).stream()
+                .filter(l -> l.isCurrent() && token.getUserId() == id) // 根据目标用户ID筛选
+                .findFirst()
+                .orElse(null);
+        int rank = ladder != null ? ladder.getLevelGrade() : -1;
         // 不存在查询的id
         if(userInfo.getStatus()==InfoStatus.NONEXISTENT) return null;
 
@@ -85,10 +88,10 @@ public class UserInfoImage {
                     try {
                         Future<ReplyItem> replyItemFuture = scheduler.async(() -> ReplyItem.get(token));
                         Future<AccountInfo> accountInfoFuture = scheduler.async(() -> AccountInfo.get(token));
-                        Future<Ladder> ladderFuture = scheduler.async(() -> Ladder.get(token).stream().filter(Ladder::isCurrent).findFirst().orElse(null));
+//                        Future<Ladder> ladderFuture = scheduler.async(() -> Ladder.get(token).stream().filter(Ladder::isCurrent).findFirst().orElse(null));
                         replyItem = replyItemFuture.get();
                         accountInfo = accountInfoFuture.get();
-                        ladder = ladderFuture.get();
+//                        ladder = ladderFuture.get();
                     } catch(ExecutionException | InterruptedException e) {
                         accountInfo = AccountInfo.get(token);
                         replyItem = ReplyItem.get(token);
@@ -131,7 +134,7 @@ public class UserInfoImage {
     public void test() {
         Token token = new Token(5559326, "pyBCTjsQXbcCJa2GpqA92HT7AUaixAuztdu7G61LvE7wsrB2gzS3yZ34z7wU5uBT-M5w2yf5_6NB_Ik7TpUv_kWezGUhfpxzTaHk8iT3wGpQQsdiUresZxe30piSuJe7meFEwHB0jDhxq07patSpK_WDCUDue3Sl4QKlVDl2hY-JQ7KP9xXqysoyUvi1Aj0iR1I9NyWQGl7fUWa8Ko9kOAlnGNqJGDXT2PX8s3qXPC88s0ZKN9bhIFaCk6-7Ivxtx6nemzdPN-TrPfr9M7Sbok2cgCiq-GJmUJ_AHqYQG3DAbAN19bbtjtXWjz5_D21DaHduGPCBF9WZRYBOdduT4f4WJSrBe6TNLAd10sSDWxiQ0nGAFXRFpovKpORjr6_Z");
         String path = "C:\\Users\\Administrator\\IdeaProjects\\DanceFengBot\\result.png";
-        ImageDrawer.write(generate(token, 5559326), path);
+        ImageDrawer.write(generate(token, 6794241), path);
     }
 }
 

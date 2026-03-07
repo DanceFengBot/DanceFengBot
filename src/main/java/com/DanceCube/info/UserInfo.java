@@ -1,14 +1,14 @@
 package com.DanceCube.info;
 
 import com.DanceCube.token.Token;
+import com.DanceFengBot.config.AbstractConfig;
 import com.google.gson.*;
 import com.Tools.HttpUtil;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import com.DanceCube.info.InfoStatus;
-import org.junit.Test;
+import com.Tools.image.DynamicImageToStatic;
 
 import java.io.IOException;
 import java.util.Map;
@@ -41,6 +41,7 @@ public class UserInfo {
     public String getHeadimgURL() {
         return headimgURL;
     }
+
 
     public String getUserName() {
         return userName;
@@ -78,15 +79,38 @@ public class UserInfo {
         if (titleUrl == null || titleUrl.length() < 5) {
             return "";
         }
-        String suffix = "/256";
-        if (titleUrl.endsWith(suffix)) {
-            return titleUrl.substring(0, titleUrl.length() - suffix.length());
+        if (titleUrl.endsWith("/256")) {
+            titleUrl = titleUrl.substring(0, titleUrl.length() - "/256".length());
+            if (titleUrl.endsWith(".png")){
+                return titleUrl;
+            }else if(titleUrl.endsWith(".webp")){
+                try {
+                    return DynamicImageToStatic.convert(titleUrl, AbstractConfig.configPath+"tmp/title_%d.png".formatted(userID));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
-        return titleUrl;
+        return null;
     }
 
     public String getHeadimgBoxPath() {
-        return headimgBoxPath==null ? "" : headimgBoxPath;
+        if (headimgBoxPath == null || headimgBoxPath.length() < 5) {
+            return "";
+        }
+        if (headimgBoxPath.endsWith("/256")) {
+            headimgBoxPath = headimgBoxPath.substring(0, headimgBoxPath.length() - "/256".length());
+            if (headimgBoxPath.endsWith(".png")){
+                return headimgBoxPath;
+            }else if(headimgBoxPath.endsWith(".webp")){
+                try {
+                    return DynamicImageToStatic.convert(headimgBoxPath, AbstractConfig.configPath+"tmp/headimgbox_%d.png".formatted(userID));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return null;
     }
 
     public InfoStatus getStatus() {

@@ -108,10 +108,9 @@ public class UserRatioImage {
             drawer.setAntiAliasing(); // 抗锯齿
             
 //            CompletableFuture.allOf(avatarFuture, boxFuture, titleFuture).join();
-            assert finalInfo != null;
-            drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgURL()), 34, 180, 174, 174);
-            drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgBoxPath()), -24, 122, 290, 290);
-            drawer.drawImage(ImageDrawer.read(finalInfo.getTitleUrl()), 13, 373, 230, 79);
+            if(finalInfo.getHeadimgURL() != null && !finalInfo.getHeadimgURL().equals("")) drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgURL()), 34, 180, 174, 174);
+            if(finalInfo.getHeadimgBoxPath() != null && !finalInfo.getHeadimgBoxPath().equals("")) drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgBoxPath()), -24, 122, 290, 290);
+            if(finalInfo.getTitleUrl() != null && !finalInfo.getTitleUrl().equals("")) drawer.drawImage(ImageDrawer.read(finalInfo.getTitleUrl()), 13, 373, 230, 79);
             if(rank == 0){
                 drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge0.png"), -60, 122, 183, 120);
             }else if(rank == 1) {
@@ -131,7 +130,6 @@ public class UserRatioImage {
             throw new RuntimeException(e);
         }
 
-        assert info != null;
         int lvRatio = info.getLvRatio();
         String userInfoText = """
                 %s

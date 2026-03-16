@@ -81,17 +81,23 @@ public class UserInfo {
         }
         if (titleUrl.endsWith("/256")) {
             titleUrl = titleUrl.substring(0, titleUrl.length() - "/256".length());
-            if (titleUrl.endsWith(".png")){
+            if (titleUrl.endsWith(".png")) {
                 return titleUrl;
-            }else if(titleUrl.endsWith(".webp")){
+            } else if (titleUrl.endsWith(".webp")) {
                 try {
-                    return DynamicImageToStatic.convert(titleUrl, AbstractConfig.configPath+"tmp/title_%d.png".formatted(userID));
+                    String convertedPath = DynamicImageToStatic.convert(titleUrl,
+                            AbstractConfig.configPath + "tmp/title_%d.png".formatted(userID));
+                    if (convertedPath.isEmpty()) {
+                        throw new IllegalArgumentException("Converted image path is null or empty!");
+                    }
+                    return convertedPath;
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    throw new RuntimeException("Failed to convert image: " + titleUrl, e);
                 }
             }
         }
-        return null;
+        return titleUrl;
     }
 
     public String getHeadimgBoxPath() {
@@ -100,17 +106,23 @@ public class UserInfo {
         }
         if (headimgBoxPath.endsWith("/256")) {
             headimgBoxPath = headimgBoxPath.substring(0, headimgBoxPath.length() - "/256".length());
-            if (headimgBoxPath.endsWith(".png")){
+            if (headimgBoxPath.endsWith(".png")) {
                 return headimgBoxPath;
-            }else if(headimgBoxPath.endsWith(".webp")){
+            } else if (headimgBoxPath.endsWith(".webp")) {
                 try {
-                    return DynamicImageToStatic.convert(headimgBoxPath, AbstractConfig.configPath+"tmp/headimgbox_%d.png".formatted(userID));
+                    String convertedPath = DynamicImageToStatic.convert(headimgBoxPath,
+                            AbstractConfig.configPath + "tmp/headimgbox_%d.png".formatted(userID));
+                    if (convertedPath.isEmpty()) {
+                        throw new IllegalArgumentException("Converted image path is null or empty!");
+                    }
+                    return convertedPath;
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    throw new RuntimeException("Failed to convert image: " + headimgBoxPath, e);
                 }
             }
         }
-        return null;
+        return headimgBoxPath;
     }
 
     public InfoStatus getStatus() {

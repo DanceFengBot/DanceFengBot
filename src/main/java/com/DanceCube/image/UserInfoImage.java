@@ -39,19 +39,28 @@ public class UserInfoImage {
                 .orElse(null);
         int rank = ladder != null ? ladder.getLevelGrade() : -1;
         // 不存在查询的id
-        if(userInfo.getStatus()==InfoStatus.NONEXISTENT) return null;
+        if (userInfo.getStatus() == InfoStatus.NONEXISTENT) return null;
 
         //不存在用户
-        if(userInfo.getHeadimgURL()==null) return null;
+        if (userInfo.getHeadimgURL() == null) return null;
 
         ImageDrawer drawer = new ImageDrawer(bgPath);
         drawer.setAntiAliasing();
-        drawer.drawImage(ImageDrawer.read(userInfo.getHeadimgURL()), 120, 150, 137, 137);
+        drawer.drawImage(ImageDrawer.read(userInfo.getHeadimgURL()), 120, 150, 137, 137);   // 头像
 
-        if(!userInfo.getHeadimgBoxPath().equals("")) // 头像框校验
-            drawer.drawImage(ImageDrawer.read(userInfo.getHeadimgBoxPath()), 74, 104, 230, 230);
-        if(!userInfo.getTitleUrl().equals("")) // 头衔校验
-            drawer.drawImage(ImageDrawer.read(userInfo.getTitleUrl()), 95, 300, 190, 68);
+        if (!userInfo.getHeadimgBoxPath().equals("")) { // 头像框校验
+            if (userInfo.getHeadimgBoxPath().startsWith("http")) {
+                drawer.drawImage(ImageDrawer.read(userInfo.getHeadimgBoxPath()), 74, 104, 230, 230);
+            } else if (userInfo.getHeadimgBoxPath().startsWith("file")) {
+                drawer.drawImage(ImageDrawer.read(userInfo.getHeadimgBoxPath()), 74, 40, 200, 200);
+            }
+        }
+        if (!userInfo.getTitleUrl().equals("")) { // 称号校验
+            if (userInfo.getTitleUrl().startsWith("http")) {
+                drawer.drawImage(ImageDrawer.read(userInfo.getTitleUrl()), 95, 300, 190, 68);
+            } else if (userInfo.getTitleUrl().startsWith("file")) {
+                drawer.drawImage(ImageDrawer.read(userInfo.getTitleUrl()), 95, 300, 190, 68);
+            }
         if(rank == 0){
             drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge0.png"), 25, 95, 183, 120);
         }else if(rank == 1) {
@@ -68,73 +77,73 @@ public class UserInfoImage {
             drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge7.png"), 25, 95, 183, 120);
         }
 
-        Font font = new Font("得意黑", Font.PLAIN, 36);
-        Font font2 = new Font("得意黑", Font.PLAIN, 20);
-        TextEffect effect = new TextEffect().setMaxWidth(235).setSpaceHeight(0);
-        drawer.font(font);
-        //信息开放
-        if(userInfo.getStatus()!=InfoStatus.PRIVATE) {
-            String gold = "不可见";
-            String playedTimes = "不可见";
-            String ladderScore = "不可见";
-            if(token.getUserId()==id) {
-                ReplyItem replyItem;
-                AccountInfo accountInfo;
-                // 异步获取个人信息
-                if(itIsAReeeeaaaalWindowsMark()) {
-                    accountInfo = AccountInfo.get(token);
-                    replyItem = ReplyItem.get(token);
-                } else {
-                    try {
-                        Future<ReplyItem> replyItemFuture = scheduler.async(() -> ReplyItem.get(token));
-                        Future<AccountInfo> accountInfoFuture = scheduler.async(() -> AccountInfo.get(token));
-//                        Future<Ladder> ladderFuture = scheduler.async(() -> Ladder.get(token).stream().filter(Ladder::isCurrent).findFirst().orElse(null));
-                        replyItem = replyItemFuture.get();
-                        accountInfo = accountInfoFuture.get();
-//                        ladder = ladderFuture.get();
-                    } catch(ExecutionException | InterruptedException e) {
+            Font font = new Font("得意黑", Font.PLAIN, 36);
+            Font font2 = new Font("得意黑", Font.PLAIN, 20);
+            TextEffect effect = new TextEffect().setMaxWidth(235).setSpaceHeight(0);
+            drawer.font(font);
+            //信息开放
+            if (userInfo.getStatus() != InfoStatus.PRIVATE) {
+                String gold = "不可见";
+                String playedTimes = "不可见";
+                String ladderScore = "不可见";
+                if (token.getUserId() == id) {
+                    ReplyItem replyItem;
+                    AccountInfo accountInfo;
+                    // 异步获取个人信息
+                    if (itIsAReeeeaaaalWindowsMark()) {
                         accountInfo = AccountInfo.get(token);
                         replyItem = ReplyItem.get(token);
+                    } else {
+                        try {
+                            Future<ReplyItem> replyItemFuture = scheduler.async(() -> ReplyItem.get(token));
+                            Future<AccountInfo> accountInfoFuture = scheduler.async(() -> AccountInfo.get(token));
+//                        Future<Ladder> ladderFuture = scheduler.async(() -> Ladder.get(token).stream().filter(Ladder::isCurrent).findFirst().orElse(null));
+                            replyItem = replyItemFuture.get();
+                            accountInfo = accountInfoFuture.get();
+//                        ladder = ladderFuture.get();
+                        } catch (ExecutionException | InterruptedException e) {
+                            accountInfo = AccountInfo.get(token);
+                            replyItem = ReplyItem.get(token);
+                        }
                     }
+
+                    gold = String.valueOf(accountInfo.getGold());
+                    playedTimes = String.valueOf(replyItem.getPlayedTimes());
+                    ladderScore = String.valueOf(ladder.getLevelPoint());
+
+
                 }
-
-                gold = String.valueOf(accountInfo.getGold());
-                playedTimes = String.valueOf(replyItem.getPlayedTimes());
-                ladderScore = String.valueOf(ladder.getLevelPoint());
-
+                drawer.drawText("%s\n\n战队：%s\n战力：%d\n金币：%s"
+                                .formatted(userInfo.getUserName(),
+                                        userInfo.getTeamName().equals("") ? "无" : userInfo.getTeamName(),
+                                        userInfo.getLvRatio(),
+                                        gold), 293, 137, effect)
+                        .drawText("积分：%s\n全连率：%.2f%%\n全国排名：%d\n游玩次数：%s\n天梯分：%s"
+                                .formatted(userInfo.getMusicScore(),
+                                        (float) userInfo.getComboPercent() / 100,
+                                        userInfo.getRankNation(),
+                                        playedTimes, ladderScore), 106, 472, effect)
+                        .font(font2)
+                        .drawText("ID：" + userInfo.getUserID(), 293, 170);
+            } else { //屏蔽
+                drawer.drawText("%s\n\n地区：%s\n战力：%d"
+                                .formatted(userInfo.getUserName(),
+                                        userInfo.getCityName().equals("") ? "无" : userInfo.getCityName(),
+                                        userInfo.getLvRatio()), 293, 137, effect)
+                        .drawText("该账号已设置隐私", 106, 472)
+                        .font(font2)
+                        .drawText("ID：" + userInfo.getUserID(), 293, 170);
 
             }
-            drawer.drawText("%s\n\n战队：%s\n战力：%d\n金币：%s"
-                            .formatted(userInfo.getUserName(),
-                                    userInfo.getTeamName().equals("") ? "无" : userInfo.getTeamName(),
-                                    userInfo.getLvRatio(),
-                                    gold), 293, 137, effect)
-                    .drawText("积分：%s\n全连率：%.2f%%\n全国排名：%d\n游玩次数：%s\n天梯分：%s"
-                            .formatted(userInfo.getMusicScore(),
-                                    (float) userInfo.getComboPercent() / 100,
-                                    userInfo.getRankNation(),
-                                    playedTimes, ladderScore), 106, 472, effect)
-                    .font(font2)
-                    .drawText("ID：" + userInfo.getUserID(), 293, 170);
-        } else { //屏蔽
-            drawer.drawText("%s\n\n地区：%s\n战力：%d"
-                            .formatted(userInfo.getUserName(),
-                                    userInfo.getCityName().equals("") ? "无" : userInfo.getCityName(),
-                                    userInfo.getLvRatio()), 293, 137, effect)
-                    .drawText("该账号已设置隐私", 106, 472)
-                    .font(font2)
-                    .drawText("ID：" + userInfo.getUserID(), 293, 170);
-
+            drawer.dispose();
+            return drawer.getImageStream("PNG");
         }
-        drawer.dispose();
-        return drawer.getImageStream("PNG");
+        return null;
     }
-
     @Test
     public void test() {
-        Token token = new Token(5559326, "pyBCTjsQXbcCJa2GpqA92HT7AUaixAuztdu7G61LvE7wsrB2gzS3yZ34z7wU5uBT-M5w2yf5_6NB_Ik7TpUv_kWezGUhfpxzTaHk8iT3wGpQQsdiUresZxe30piSuJe7meFEwHB0jDhxq07patSpK_WDCUDue3Sl4QKlVDl2hY-JQ7KP9xXqysoyUvi1Aj0iR1I9NyWQGl7fUWa8Ko9kOAlnGNqJGDXT2PX8s3qXPC88s0ZKN9bhIFaCk6-7Ivxtx6nemzdPN-TrPfr9M7Sbok2cgCiq-GJmUJ_AHqYQG3DAbAN19bbtjtXWjz5_D21DaHduGPCBF9WZRYBOdduT4f4WJSrBe6TNLAd10sSDWxiQ0nGAFXRFpovKpORjr6_Z");
+        Token token = new Token(5559326, "1lbB11CZYcvge-AztIubtegacGJfhEA-qP_BRMOac_hHFG35THBfTCOdpkP61qFEl9ulZ73gvAc-xbXvdcOqQs4WoGJpZ7FZojjIhPr4qw1L4aqCVQsCtAj_XmZCPatgooWJpkBldRxVzG7x3GeALrda_lq677KCvZNnKGJ3YLcedxUW_LXfgURIIrBk8ZfqLfRUpJL-wafihc4eGwTFCeFsI9V03VQc7pXNlBjXbvcJLaakVwzNl_8Y0FzCf8qOwQtkvOIMb2o6rrnWNL1b82sY-sllkf5MBjGX5F7B1JRaaCyyPnpnedH1ObPP8SUowDoVJDrO-nGSujt1p_Y29c0dcv6flZGTR2ofY3saktMkhZDMJLXvoRKj_HHR0Ola");
         String path = "C:\\Users\\Administrator\\IdeaProjects\\DanceFengBot\\result.png";
-        ImageDrawer.write(generate(token, 6794241), path);
+        ImageDrawer.write(generate(token, 5559326), path);
     }
 }
-

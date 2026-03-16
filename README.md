@@ -62,7 +62,6 @@ DcConfig
 │  OfficialMusicIds.json
 │  TokenIds.json
 │  UserTokens.json
-│  db.yml
 │  
 └─Images
     │
@@ -113,7 +112,6 @@ DcConfig
 | `TokenIds.json`     | 文件      | 用于获取二维码登录    | **手动配置** |
 | `ApiKeys.yml`       | 文件      | 用于API令牌      | **手动配置** |
 | `UserCommands.json` | 文件      | 用于保存用户信息触发指令 | **无需手动配置** |
-| `db.yml`            | 文件      | 用于保存数据库配置信息  | **手动配置** |
 
 #### TokenIds
 
@@ -162,21 +160,7 @@ gaodeMapKeys:
 配置文件中已含有背景图片
 
 如果想自定义模板，需要修改`Image`类的源码  
-你也可以进入[即时设计](https://js.design/f/M5a8Zp)中获取本图片模板，自行设计
-
-#### db
-用于配置数据库信息(只支持mysql8.0+)
-
-“查歌”需要使用数据库
-```yaml
-database:
-  driver: "com.mysql.cj.jdbc.Driver"  #勿动
-  host: "localhost"
-  port: "3306"
-  user: "root"
-  password: "your_password"
-  database: "bot"
-```
+你也可以进入[即时设计](https://js.design/f/Y3IL8R)中获取本图片模板，自行设计
 
 ### 开发帮助
 

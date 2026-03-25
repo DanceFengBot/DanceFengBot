@@ -78,9 +78,8 @@ public class UserInfo {
         if (titleUrl == null || titleUrl.length() < 5) {
             return "";
         }
-        String suffix = "/256";
-        if (titleUrl.endsWith(suffix)) {
-            return titleUrl.substring(0, titleUrl.length() - suffix.length());
+        if (titleUrl.endsWith("/256")) {
+            return titleUrl.substring(0, titleUrl.length() - "/256".length());
         }
         return titleUrl;
     }

@@ -399,12 +399,14 @@ public class ImageDrawer {
     }
 
     public static BufferedImage read(String url) {
+        if (url == null || url.trim().isEmpty()) {
+            throw new IllegalArgumentException("URL cannot be null or empty");
+        }
         try {
             return ImageIO.read(new URL(url));
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public static void write(BufferedImage image, String path) {

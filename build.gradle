@@ -47,6 +47,6 @@ dependencies {
     implementation 'junit:junit:4.13.1'
     implementation group: 'org.mybatis', name: 'mybatis', version: '3.5.19'
     implementation group: 'commons-io', name: 'commons-io', version: '2.21.0'
-
+    implementation 'com.twelvemonkeys.imageio:imageio-webp:3.13.1'
 }
 

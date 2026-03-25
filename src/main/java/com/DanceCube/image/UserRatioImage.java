@@ -106,23 +106,12 @@ public class UserRatioImage {
             //异步阻塞完绘制战力图
             drawer = new ImageDrawer(backgroundImgFuture.get());
             drawer.setAntiAliasing(); // 抗锯齿
-
-
-            // 绘制头像
-            String headimgUrl = finalInfo.getHeadimgURL();
-            if (headimgUrl != null && !headimgUrl.trim().isEmpty()) {
-                drawer.drawImage(ImageDrawer.read(headimgUrl), 34, 180, 174, 174);
-            }
-
-            String headimgBoxPath = finalInfo.getHeadimgBoxPath();
-            if (headimgBoxPath != null && !headimgBoxPath.trim().isEmpty()) {
-                drawer.drawImage(ImageDrawer.read(headimgBoxPath), -24, 122, 290, 290);
-            }
-
-            String titleUrl = finalInfo.getTitleUrl();
-            if (titleUrl != null && !titleUrl.trim().isEmpty()) {
-                drawer.drawImage(ImageDrawer.read(titleUrl), 13, 373, 230, 79);
-            }
+            
+//            CompletableFuture.allOf(avatarFuture, boxFuture, titleFuture).join();
+            assert finalInfo != null;
+            drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgURL()), 34, 180, 174, 174);
+            drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgBoxPath()), -24, 122, 290, 290);
+            drawer.drawImage(ImageDrawer.read(finalInfo.getTitleUrl()), 13, 373, 230, 79);
             if(rank == 0){
                 drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge0.png"), -60, 122, 183, 120);
             }else if(rank == 1) {

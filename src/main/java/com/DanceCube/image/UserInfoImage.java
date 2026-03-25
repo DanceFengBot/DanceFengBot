@@ -72,13 +72,13 @@ public class UserInfoImage {
         Font font2 = new Font("得意黑", Font.PLAIN, 20);
         TextEffect effect = new TextEffect().setMaxWidth(235).setSpaceHeight(0);
         drawer.font(font);
-        ReplyItem replyItem = ReplyItem.get(token);
         //信息开放
         if(userInfo.getStatus()!=InfoStatus.PRIVATE) {
             String gold = "不可见";
             String playedTimes = "不可见";
             String ladderScore = "不可见";
             if(token.getUserId()==id) {
+                ReplyItem replyItem;
                 AccountInfo accountInfo;
                 // 异步获取个人信息
                 if(itIsAReeeeaaaalWindowsMark()) {
@@ -104,22 +104,19 @@ public class UserInfoImage {
 
 
             }
-            drawer.drawText("%s\n\n战队：%s\n战力：%d\n金币：%s\n积分：%s"
+            drawer.drawText("%s\n\n战队：%s\n战力：%d\n金币：%s"
                             .formatted(userInfo.getUserName(),
                                     userInfo.getTeamName().equals("") ? "无" : userInfo.getTeamName(),
                                     userInfo.getLvRatio(),
-                                    gold,
-                                    userInfo.getMusicScore()), 293, 115, effect)
-                    .drawText("舞龄：%s\n全连率：%.2f%%\n全国排名：%d\n游玩次数：%s\n天梯分：%s"
-                            .formatted(replyItem.getPlayedAge(),(float) userInfo.getComboPercent() / 100,
+                                    gold), 293, 137, effect)
+                    .drawText("积分：%s\n全连率：%.2f%%\n全国排名：%d\n游玩次数：%s\n天梯分：%s"
+                            .formatted(userInfo.getMusicScore(),
+                                    (float) userInfo.getComboPercent() / 100,
                                     userInfo.getRankNation(),
                                     playedTimes, ladderScore), 106, 472, effect)
                     .font(font2)
-                    .drawText("ID：%d\n地区：%s"
-                                    .formatted(userInfo.getUserID(),
-                                            userInfo.getCityName().equals("") ? "无" : userInfo.getCityName()),
-                            293, 156, effect);
-        } else {
+                    .drawText("ID：" + userInfo.getUserID(), 293, 170);
+        } else { //屏蔽
             drawer.drawText("%s\n\n地区：%s\n战力：%d"
                             .formatted(userInfo.getUserName(),
                                     userInfo.getCityName().equals("") ? "无" : userInfo.getCityName(),
@@ -135,9 +132,9 @@ public class UserInfoImage {
 
     @Test
     public void test() {
-        Token token = new Token(5559326, "Qb3S0cgPFrVEF7PXZ4EkV-4YG5Coecb7KUrMjmRu_NqOlLld8-YlftapawAhe-gk2_keseytiSeIYAcoPXTVNWF14trFVP02D7agFhA2z_PEo5JLGfu6Mgi0f3XVxcoCn5li46c05S55PE0s7XV46HA2UTvtyRhMrggh00F4zbzRDbshp9mtS5kZxPjd2PXHsKJgbVgnQBCmnlBHXY9SYfpdXSH1Wb8qYb1PBfIKDP47K7ZfUmceVviXwJ9KQ6NHxg3KjPOs5vxe19RTWcGl5zmpMLCEy_2q5_gTvzdspPybVPgfIPJcHVwny7HZFAtWYRp7ovFB1ZAfCiLM0r-RYLA8-PbnLpdqrgtpI2XZq0uifsiJgnlRRRt5XeloQkYM");
+        Token token = new Token(5559326, "pyBCTjsQXbcCJa2GpqA92HT7AUaixAuztdu7G61LvE7wsrB2gzS3yZ34z7wU5uBT-M5w2yf5_6NB_Ik7TpUv_kWezGUhfpxzTaHk8iT3wGpQQsdiUresZxe30piSuJe7meFEwHB0jDhxq07patSpK_WDCUDue3Sl4QKlVDl2hY-JQ7KP9xXqysoyUvi1Aj0iR1I9NyWQGl7fUWa8Ko9kOAlnGNqJGDXT2PX8s3qXPC88s0ZKN9bhIFaCk6-7Ivxtx6nemzdPN-TrPfr9M7Sbok2cgCiq-GJmUJ_AHqYQG3DAbAN19bbtjtXWjz5_D21DaHduGPCBF9WZRYBOdduT4f4WJSrBe6TNLAd10sSDWxiQ0nGAFXRFpovKpORjr6_Z");
         String path = "C:\\Users\\Administrator\\IdeaProjects\\DanceFengBot\\result.png";
-        ImageDrawer.write(generate(token, 5559326), path);
+        ImageDrawer.write(generate(token, 6794241), path);
     }
 }
 

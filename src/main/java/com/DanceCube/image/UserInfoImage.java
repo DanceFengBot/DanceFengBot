@@ -76,6 +76,7 @@ public class UserInfoImage {
         if(userInfo.getStatus()!=InfoStatus.PRIVATE) {
             String gold = "不可见";
             String playedTimes = "不可见";
+            String region = "无";
             String ladderScore = "不可见";
             if(token.getUserId()==id) {
                 ReplyItem replyItem;
@@ -101,6 +102,7 @@ public class UserInfoImage {
                 gold = String.valueOf(accountInfo.getGold());
                 playedTimes = String.valueOf(replyItem.getPlayedTimes());
                 ladderScore = String.valueOf(ladder.getLevelPoint());
+                region = String.valueOf(userInfo.getCityName());
 
 
             }
@@ -115,7 +117,7 @@ public class UserInfoImage {
                                     userInfo.getRankNation(),
                                     playedTimes, ladderScore), 106, 472, effect)
                     .font(font2)
-                    .drawText("ID：" + userInfo.getUserID(), 293, 170);
+                    .drawText("ID：%d\n地区：%s".formatted(userInfo.getUserID(),region), 293, 175,effect);
         } else { //屏蔽
             drawer.drawText("%s\n\n地区：%s\n战力：%d"
                             .formatted(userInfo.getUserName(),
@@ -132,9 +134,9 @@ public class UserInfoImage {
 
     @Test
     public void test() {
-        Token token = new Token(5559326, "pyBCTjsQXbcCJa2GpqA92HT7AUaixAuztdu7G61LvE7wsrB2gzS3yZ34z7wU5uBT-M5w2yf5_6NB_Ik7TpUv_kWezGUhfpxzTaHk8iT3wGpQQsdiUresZxe30piSuJe7meFEwHB0jDhxq07patSpK_WDCUDue3Sl4QKlVDl2hY-JQ7KP9xXqysoyUvi1Aj0iR1I9NyWQGl7fUWa8Ko9kOAlnGNqJGDXT2PX8s3qXPC88s0ZKN9bhIFaCk6-7Ivxtx6nemzdPN-TrPfr9M7Sbok2cgCiq-GJmUJ_AHqYQG3DAbAN19bbtjtXWjz5_D21DaHduGPCBF9WZRYBOdduT4f4WJSrBe6TNLAd10sSDWxiQ0nGAFXRFpovKpORjr6_Z");
+        Token token = new Token(5559326, "Yl2q1DhmfQ_hJiejDzUFNX5bwbSMLmlq5S8rHsM6wY8M2PT-haQjbUmqiydcQe3G0cpAsrOugpl05Gn14wgrk71n06q3VZYcIQQ3a_BHufpMDmywntMS5VfREFjZRAigHkCOXKf8So9mHGU0AJdb8beSPSoxCNkJIr7W8MSEid_9DVkIiZ-5rnXI8wY5MPlrJA47QmCdS9JD2ulniMpgHs_TbZSMOtGLZbIJcvJAjucyGea4AV5VoeDqm5HOJMoLJ0aOhOKefFVvQU0WKQUBNyenA1WInjLtXPKpR46gOJqVYoTs1PiEMMTju0oNRPtDRCrmIwcPnU4zLNBEq_bhp2YDAPKaomFcSY-wI5dsgOTJhvIK0IVpDZN38gJVu3NG");
         String path = "C:\\Users\\Administrator\\IdeaProjects\\DanceFengBot\\result.png";
-        ImageDrawer.write(generate(token, 6794241), path);
+        ImageDrawer.write(generate(token, 5559326), path);
     }
 }
 

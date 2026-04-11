@@ -111,7 +111,8 @@ public class UserRatioImage {
             assert finalInfo != null;
             drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgURL()), 34, 180, 174, 174);
             drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgBoxPath()), -24, 122, 290, 290);
-            drawer.drawImage(ImageDrawer.read(finalInfo.getTitleUrl()), 13, 373, 230, 79);
+            if(!finalInfo.getTitleUrl().equals(""))
+                drawer.drawImage(ImageDrawer.read(finalInfo.getTitleUrl()), 13, 373, 230, 79);
             if(rank == 0){
                 drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge0.png"), -60, 122, 183, 120);
             }else if(rank == 1) {

@@ -53,7 +53,7 @@ public class MainHandler {
         event.accept();
         Friend friend = event.getBot().getFriend(event.getFromId());
         if(friend != null) {
-            friend.sendMessage("🥰呐~ 现在我们是好朋友啦！\n请到主页查看功能哦！");
+            friend.sendMessage("🥰呐~ 现在我们是好朋友啦！\n请发送“help”查看功能哦！");
             FriendGroup friendGroup = event.getBot().getFriendGroups().get(0);
             if(friendGroup != null) {
                 friendGroup.moveIn(friend);

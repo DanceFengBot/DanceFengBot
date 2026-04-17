@@ -87,7 +87,6 @@ public class UserRatioImage {
         ImageDrawer drawer;
         try {
             // 为什么这里放个finalInfo？
-            final UserInfo finalInfo = info;
             if(info==null) {
                 System.err.println("# 战力分析时个人信息获取失败");
             }
@@ -108,11 +107,11 @@ public class UserRatioImage {
             drawer.setAntiAliasing(); // 抗锯齿
             
 //            CompletableFuture.allOf(avatarFuture, boxFuture, titleFuture).join();
-            assert finalInfo != null;
-            drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgURL()), 34, 180, 174, 174);
-            drawer.drawImage(ImageDrawer.read(finalInfo.getHeadimgBoxPath()), -24, 122, 290, 290);
-            if(!finalInfo.getTitleUrl().equals(""))
-                drawer.drawImage(ImageDrawer.read(finalInfo.getTitleUrl()), 13, 373, 230, 79);
+            assert info != null;
+            drawer.drawImage(ImageDrawer.read(info.getHeadimgURL()), 34, 180, 174, 174);
+            drawer.drawImage(ImageDrawer.read(info.getHeadimgBoxPath()), -24, 122, 290, 290);
+            if(!info.getTitleUrl().equals(""))
+                drawer.drawImage(ImageDrawer.read(info.getTitleUrl()), 13, 373, 230, 79);
             if(rank == 0){
                 drawer.drawImage(ImageDrawer.read("https://dancewebdemo.shenghuayule.com/dance/static/userCenter_img/quanminxingBadge0.png"), -60, 122, 183, 120);
             }else if(rank == 1) {

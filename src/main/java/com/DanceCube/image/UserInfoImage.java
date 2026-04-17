@@ -101,8 +101,9 @@ public class UserInfoImage {
 
                 gold = String.valueOf(accountInfo.getGold());
                 playedTimes = String.valueOf(replyItem.getPlayedTimes());
-                assert ladder != null;
-                ladderScore = String.valueOf(ladder.getLevelPoint());
+                if (ladder != null) {
+                    ladderScore = String.valueOf(ladder.getLevelPoint());
+                }
                 region = String.valueOf(userInfo.getCityName());
 
 

@@ -29,11 +29,19 @@ public class RatioCalculator {
         List<RecentMusicInfo> allRecentList = getAllRecentList(auth);
         List<RankMusicInfo> rank15List = new ArrayList<>(getSubRank15List(allRankList, true));
         List<RecentMusicInfo> recent15List = new ArrayList<>(getSubRecent15List(allRecentList, false));
+        List<RankMusicInfo> rank30List = new ArrayList<>(getSubRank30List(allRankList,true));
 
         //Best 15
         System.out.println("#The Best 15 PlayerMusic");
         for(int i = 0, rank15ListSize = rank15List.size(); i<rank15ListSize; i++) {
             RankMusicInfo musicInfo = rank15List.get(i);
+            System.out.printf("#%d Name:%s, Ratio: %.2f\n", i + 1, musicInfo.getName(), musicInfo.getRatio());
+        }
+
+        //Best 30
+        System.out.println("#The Best 30 PlayerMusic");
+        for(int i = 0, rank30ListSize = rank30List.size(); i<rank30ListSize; i++) {
+            RankMusicInfo musicInfo = rank30List.get(i);
             System.out.printf("#%d Name:%s, Ratio: %.2f\n", i + 1, musicInfo.getName(), musicInfo.getRatio());
         }
 
@@ -145,6 +153,33 @@ public class RatioCalculator {
         if(ratioValidOnly) {
             int count = 0; // 用于跟踪添加到subRankList中的项数
             for(int i = 0; i<musicInfoList.size() && count<15; i++) {
+                RankMusicInfo musicInfo = musicInfoList.get(i);
+                if(isRatioValid(musicInfo)) {
+                    subRankList.add(musicInfo);
+                    count++; // 增加计数器
+                }
+            }
+        } else {
+            for(int i = 0; i<Math.min(15, musicInfoList.size()); i++) {
+                subRankList.add(musicInfoList.get(i));
+            }
+        }
+        return subRankList;
+    }
+
+    /**
+     * 获取B30 (可能小于30)
+     *
+     * @param musicInfoList  源Best列表
+     * @param ratioValidOnly 仅可计入战力模式
+     * @return b30
+     */
+    public static List<RankMusicInfo> getSubRank30List(List<RankMusicInfo> musicInfoList, boolean ratioValidOnly) {
+        musicInfoList.sort((o1, o2) -> Float.compare(o2.getRatio(), o1.getRatio()));
+        List<RankMusicInfo> subRankList = new ArrayList<>();
+        if(ratioValidOnly) {
+            int count = 0; // 用于跟踪添加到subRankList中的项数
+            for(int i = 0; i<musicInfoList.size() && count<30; i++) {
                 RankMusicInfo musicInfo = musicInfoList.get(i);
                 if(isRatioValid(musicInfo)) {
                     subRankList.add(musicInfo);

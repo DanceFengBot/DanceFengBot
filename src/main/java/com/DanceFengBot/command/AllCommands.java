@@ -465,6 +465,29 @@ public class AllCommands {
                     contact.sendMessage(image);
                 }
             }).build();
+    @DeclaredCommand("战力分析B30")
+    public static final RegexCommand msgUserRatioB30 = new RegexCommandBuilder()
+            .multiStrings("战力分析b30", "myrtb30")
+            .onCall(Scope.GLOBAL, (event, contact, qq, args) -> {
+                Token token = getToken(contact, qq, onNoLoginCall, onInvalidCall);
+                if(token == null) return;
+
+                contact.sendMessage("小枫正在计算中,等一下下💦...");
+                InputStream inputStream = UserRatioBest30Image.generate(token);
+                Image image;
+                if(inputStream != null) {
+                    BufferedImage bufferedImage;
+                    try(ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                        Thumbnails.of(inputStream)
+                                .scale(1)
+                                .outputFormat("jpg").toOutputStream(baos);
+                        image = HttpUtil.getImageFromBytes(baos.toByteArray(), contact);
+                    } catch(IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    contact.sendMessage(image);
+                }
+            }).build();
 
     @DeclaredCommand("成绩查询")
     public static final ArgsCommand msgUserPlayed = new ArgsCommandBuilder()

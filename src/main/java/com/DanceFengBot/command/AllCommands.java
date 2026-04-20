@@ -5,6 +5,7 @@ import com.DanceCube.api.PhoneLoginBuilder;
 import com.DanceCube.api.PlayerMusic;
 import com.DanceCube.image.LastPlayImage;
 import com.DanceCube.image.UserInfoImage;
+import com.DanceCube.image.UserRatioBest30Image;
 import com.DanceCube.image.UserRatioImage;
 import com.DanceCube.info.ReplyItem;
 import com.DanceCube.ratio.RatioCalculator;
@@ -816,6 +817,7 @@ public class AllCommands {
     }
 
 
+
     public static Token getToken(Contact contact, Long qq) {
         Token token = userTokensMap.get(qq);
         if(token == null || !token.checkAvailable()) {
@@ -826,6 +828,59 @@ public class AllCommands {
         }
         return token;
     }
+
+    @DeclaredCommand("添加群聊")
+    public static final RegexCommand addGroup = new RegexCommandBuilder()
+            .regex("添加群聊")
+            .onCall(Scope.ADMIN, (event, contact, qq, args) -> {
+                GroupManager.addGroup(contact.getId());
+                contact.sendMessage("已添加当前群聊到名单中");
+                if (!GroupManager.addGroup(contact.getId())) {
+                    contact.sendMessage("当前群聊已在名单中");
+                }
+            }).build();
+
+    @DeclaredCommand("删除群聊")
+    public static final RegexCommand delGroup = new RegexCommandBuilder()
+            .regex("删除群聊")
+            .onCall(Scope.ADMIN, (event, contact, qq, args) -> {
+                GroupManager.deleteGroup(contact.getId());
+                contact.sendMessage("已从名单中删除当前群聊");
+                if (!GroupManager.deleteGroup(contact.getId())) {
+                    contact.sendMessage("当前群聊不在名单中，无法删除");
+                }
+            }).build();
+
+    @DeclaredCommand("添加机厅")
+    public static final ArgsCommand addArcade = new ArgsCommandBuilder()
+            .prefix("添加机厅")
+            .form(ArgsCommand.CHAR)
+            .onCall(Scope.ADMIN, (event, contact, qq, args) -> {
+                // TODO 添加机厅
+                if (args != null) {
+                    ArcadeManager.addArcade(contact.getId(), args[0]);
+                }
+            }).build();
+
+    @DeclaredCommand("删除机厅")
+    public static final ArgsCommand delArcade = new ArgsCommandBuilder()
+            .prefix("删除机厅")
+            .onCall(Scope.ADMIN, (event, contact, qq, args) -> {
+                // TODO 添加机厅
+                if (args != null) {
+                    ArcadeManager.deleteArcade(contact.getId(), args[0]);
+                }
+            }).build();
+
+    @DeclaredCommand("人数更新")
+    public static final RegexCommand countUpdate = new RegexCommandBuilder()
+            .regex("^([\\u4e00-\\u9fa5\\w]+?)([+\\-=]{0,2})(\\d*)$")
+            .onCall(Scope.USER, (event, contact, qq, args) -> {
+                String message = event.getMessage().contentToString();
+                Matcher matcher = Pattern.compile("^([\\u4e00-\\u9fa5\\w]+?)([+\\-=]{0,2})(\\d*)$").matcher(message);
+                String str = matcher.group();
+                CountManager.updateCount(contact.getId(),str,event.getSenderName());
+            }).build();
 
 
     /**

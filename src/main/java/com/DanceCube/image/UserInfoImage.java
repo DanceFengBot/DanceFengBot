@@ -136,7 +136,7 @@ public class UserInfoImage {
 
     @Test
     public void test() {
-        Token token = new Token(5559326, "Yl2q1DhmfQ_hJiejDzUFNX5bwbSMLmlq5S8rHsM6wY8M2PT-haQjbUmqiydcQe3G0cpAsrOugpl05Gn14wgrk71n06q3VZYcIQQ3a_BHufpMDmywntMS5VfREFjZRAigHkCOXKf8So9mHGU0AJdb8beSPSoxCNkJIr7W8MSEid_9DVkIiZ-5rnXI8wY5MPlrJA47QmCdS9JD2ulniMpgHs_TbZSMOtGLZbIJcvJAjucyGea4AV5VoeDqm5HOJMoLJ0aOhOKefFVvQU0WKQUBNyenA1WInjLtXPKpR46gOJqVYoTs1PiEMMTju0oNRPtDRCrmIwcPnU4zLNBEq_bhp2YDAPKaomFcSY-wI5dsgOTJhvIK0IVpDZN38gJVu3NG");
+        Token token = new Token(5559326,"8a8oqTEMmjtg43eA85iL9dqCBe0TBGOQ9C-LxRRG--qOnj0UlARYLWEGsX6FODnS72Wn093bnCeabRmd0b3pIYFt669_M82FQISaC_rkNhuN72b_2rMu_F30JEz191-Kvfj97nvmE-726-VPWF8omqogu9DxUAoBKWjTVf3fFjn0-uX9zvLbqzFhG5yN0zJzxyRIxlcQJf_EdrOQbx5NYNKC3VH2t8kcVncGSXpVAAvM9ZCD97wyXv5aHQKUT04FaoAYp7p2jp69GyJRFvUzoX9QPmFQ7dS1HmHi1rks1MSdn8bJjx7LqYZ3gJRCriTYCwTu2py7m3higyKiL3rEoscZxbDXBHvXvtoSRAUUB7ut58TPfi6e37_AxVE-X5Z1");
         String path = "C:\\Users\\Administrator\\IdeaProjects\\DanceFengBot\\result.png";
         ImageDrawer.write(generate(token, 5559326), path);
     }

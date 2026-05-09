@@ -138,7 +138,8 @@ public class UserRatioBest30Image {
                 战力：%d""".formatted(info.getUserName(), info.getTeamName(), info.getRankNation(), lvRatio);
         Font infoFont = new Font("得意黑", Font.PLAIN, 45);
         Font idFont = new Font("得意黑", Font.PLAIN, 30);
-        drawer.color(Color.BLACK).font(idFont).drawText("ID: " + token.getUserId(), 245, 200)
+        drawer.color(Color.BLACK).font(idFont).drawText("ID："+token.getUserId(), 245, 200)
+                .font(idFont).drawText("地区："+info.getCityName(), 245, 230)
                 .font(infoFont).drawText(userInfoText, 245, 160, new TextEffect().setMaxWidth(230).setSpaceHeight(0));
 
 
@@ -276,7 +277,7 @@ public class UserRatioBest30Image {
     public void test() throws IOException {
         System.out.println("Running...");
         Token token = new Token(5559326,
-                "FF3AF-pxUHkUYvBXeD-qgeztlvLcrFgft3gcQjPFW6WHdcZxaFOXzfvu12DYF-WoAFgiFGj0tRBJX4TDzjasUt49TWvefUoMahbZWu4oNyzzdb8qjRLmHuMhPcKnu8zqGhtT61wkyoDZwtpMFy0Y-ZNXWuqIUDLCCQNWMUYElQ3_yqJ5i5LVKNOfWI4CwqFWtG-GjXV6gXMjTrK44yzqP-ysbsQfugyO6yFDrbXbofoAYdd6eDnBEqe5qA-NM4nujV4zzXLswjNZTw7dIRbvHY2osqSv1tKosgxoAbMQ6znYbMN4NS6QSht_zvkZd5Xbl5H8zn-s6VFpkm9rXPOGMBcM41qVEsTmgfwXouVKfyPSAMsZEZSp0hbN1VxfJiVt");
+                "8a8oqTEMmjtg43eA85iL9dqCBe0TBGOQ9C-LxRRG--qOnj0UlARYLWEGsX6FODnS72Wn093bnCeabRmd0b3pIYFt669_M82FQISaC_rkNhuN72b_2rMu_F30JEz191-Kvfj97nvmE-726-VPWF8omqogu9DxUAoBKWjTVf3fFjn0-uX9zvLbqzFhG5yN0zJzxyRIxlcQJf_EdrOQbx5NYNKC3VH2t8kcVncGSXpVAAvM9ZCD97wyXv5aHQKUT04FaoAYp7p2jp69GyJRFvUzoX9QPmFQ7dS1HmHi1rks1MSdn8bJjx7LqYZ3gJRCriTYCwTu2py7m3higyKiL3rEoscZxbDXBHvXvtoSRAUUB7ut58TPfi6e37_AxVE-X5Z1");
         String path = "C:\\Users\\Administrator\\IdeaProjects\\DanceFengBot\\result.png";
 
         InputStream image = generate(token);

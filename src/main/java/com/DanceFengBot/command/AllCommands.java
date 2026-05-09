@@ -501,6 +501,7 @@ public class AllCommands {
                 int index = 1;
                 if(args != null) {
                     try {
+                        assert args[0] != null;
                         index = Integer.parseInt(args[0]);
                     } catch(NumberFormatException e) {
                         contact.sendMessage("啊...这个数字是什么");

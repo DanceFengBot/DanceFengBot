@@ -2,6 +2,7 @@ package com.DanceCube.image;
 
 import com.DanceCube.api.Ladder;
 import com.DanceCube.api.LvRatioHistory;
+import com.DanceCube.info.ReplyItem;
 import com.DanceCube.info.UserInfo;
 import com.DanceCube.music.CoverUtil;
 import com.DanceCube.ratio.AccGrade;
@@ -72,6 +73,9 @@ public class UserRatioImage {
 //        if(!itIsAReeeeaaaalWindowsMark()) {
         info = UserInfo.get(token);
         ratioList = LvRatioHistory.get(token);
+        String region = "无";
+
+
 //        } else {
 //            CompletableFuture<UserInfo> userInfoFuture = CompletableFuture.supplyAsync(() -> UserInfo.get(token));
 //            CompletableFuture<ArrayList<LvRatioHistory>> ratioFuture = CompletableFuture.supplyAsync(() -> LvRatioHistory.get(token));
@@ -141,7 +145,10 @@ public class UserRatioImage {
                 战力：%d""".formatted(info.getUserName(), info.getTeamName(), info.getRankNation(), lvRatio);
         Font infoFont = new Font("得意黑", Font.PLAIN, 45);
         Font idFont = new Font("得意黑", Font.PLAIN, 30);
-        drawer.color(Color.BLACK).font(idFont).drawText("ID: " + token.getUserId(), 245, 200)
+
+
+        drawer.color(Color.BLACK).font(idFont).drawText("ID："+token.getUserId(), 245, 200)
+                .font(idFont).drawText("地区："+info.getCityName(), 245, 230)
                 .font(infoFont).drawText(userInfoText, 245, 160, new TextEffect().setMaxWidth(230).setSpaceHeight(0));
 
 
@@ -353,7 +360,7 @@ public class UserRatioImage {
     public void test() throws IOException {
         System.out.println("Running...");
         Token token = new Token(5559326,
-                "pyBCTjsQXbcCJa2GpqA92HT7AUaixAuztdu7G61LvE7wsrB2gzS3yZ34z7wU5uBT-M5w2yf5_6NB_Ik7TpUv_kWezGUhfpxzTaHk8iT3wGpQQsdiUresZxe30piSuJe7meFEwHB0jDhxq07patSpK_WDCUDue3Sl4QKlVDl2hY-JQ7KP9xXqysoyUvi1Aj0iR1I9NyWQGl7fUWa8Ko9kOAlnGNqJGDXT2PX8s3qXPC88s0ZKN9bhIFaCk6-7Ivxtx6nemzdPN-TrPfr9M7Sbok2cgCiq-GJmUJ_AHqYQG3DAbAN19bbtjtXWjz5_D21DaHduGPCBF9WZRYBOdduT4f4WJSrBe6TNLAd10sSDWxiQ0nGAFXRFpovKpORjr6_Z");
+                "8a8oqTEMmjtg43eA85iL9dqCBe0TBGOQ9C-LxRRG--qOnj0UlARYLWEGsX6FODnS72Wn093bnCeabRmd0b3pIYFt669_M82FQISaC_rkNhuN72b_2rMu_F30JEz191-Kvfj97nvmE-726-VPWF8omqogu9DxUAoBKWjTVf3fFjn0-uX9zvLbqzFhG5yN0zJzxyRIxlcQJf_EdrOQbx5NYNKC3VH2t8kcVncGSXpVAAvM9ZCD97wyXv5aHQKUT04FaoAYp7p2jp69GyJRFvUzoX9QPmFQ7dS1HmHi1rks1MSdn8bJjx7LqYZ3gJRCriTYCwTu2py7m3higyKiL3rEoscZxbDXBHvXvtoSRAUUB7ut58TPfi6e37_AxVE-X5Z1");
         String path = "C:\\Users\\Administrator\\IdeaProjects\\DanceFengBot\\result.png";
 
         InputStream image = generate(token);

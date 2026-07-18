@@ -3,10 +3,7 @@ package com.DanceFengBot.command;
 import com.DanceCube.api.Machine;
 import com.DanceCube.api.PhoneLoginBuilder;
 import com.DanceCube.api.PlayerMusic;
-import com.DanceCube.image.LastPlayImage;
-import com.DanceCube.image.UserInfoImage;
-import com.DanceCube.image.UserRatioBest30Image;
-import com.DanceCube.image.UserRatioImage;
+import com.DanceCube.image.*;
 import com.DanceCube.info.ReplyItem;
 import com.DanceCube.ratio.RatioCalculator;
 import com.DanceCube.ratio.RecentMusicInfo;
@@ -277,38 +274,6 @@ public class AllCommands {
         };
     }
 
-//    @DeclaredCommand("获取歌曲信息")
-//    public static final ArgsCommand getMusicInfo = new ArgsCommandBuilder()
-//            .prefix("获取歌曲信息", "查歌")
-//            .form(ArgsCommand.CHAR)
-//            .onCall(Scope.GROUP, (event, contact, qq, args) -> {
-//                if (args == null) return;
-//                //后跟官谱id
-//                long num = Long.parseLong(args[0]);
-//                File imageFile = new File(configPath + "Images/Cover/OfficialImage/" + num + ".jpg");
-//                Image image = null;
-//                try (ExternalResource resource = ExternalResource.create(imageFile)) {
-//                    image = contact.uploadImage(resource);
-//                } catch (IOException e) {
-//                    System.out.println("Failed to upload image: " + e.getMessage());
-//                }
-//                if (MusicInfo.id == -1) {
-//                    contact.sendMessage("没有找到这首歌诶...");
-//                    return;
-//                }
-//                // 创建消息链
-////                MessageChain chain = new MessageChainBuilder()
-////                        .append(image)
-////                        .append(new PlainText("\n歌曲ID：" + num))
-////                        .append(new PlainText("\n歌曲名：" + MusicInfo.name))
-////                        .append(new PlainText("\n音频链接：" + MusicInfo.Audio))
-////                        .build();
-////                contact.sendMessage(chain);
-//                contact.sendMessage(image+"\n歌曲ID：" + num +
-//                        "\n歌曲名：" + MusicInfo.name +
-//                        "\n音频链接：" + MusicInfo.Audio);
-//            }).build();
-
     @DeclaredCommand("个人信息")
     public static final RegexCommand msgUserInfo = new RegexCommandBuilder()
             .multiStrings("个人信息", "看看我的", "我的信息", "我的舞立方", "mydc", "mywlf")
@@ -489,7 +454,29 @@ public class AllCommands {
                     contact.sendMessage(image);
                 }
             }).build();
+    @DeclaredCommand("战力分析AP30")
+    public static final RegexCommand msgUserRatioAP30 = new RegexCommandBuilder()
+            .multiStrings("战力分析ap30", "myrtap30")
+            .onCall(Scope.GLOBAL, (event, contact, qq, args) -> {
+                Token token = getToken(contact, qq, onNoLoginCall, onInvalidCall);
+                if(token == null) return;
 
+                contact.sendMessage("小枫正在计算中,等一下下💦...");
+                InputStream inputStream = UserRatioAP30Image.generate(token);
+                Image image;
+                if(inputStream != null) {
+                    BufferedImage bufferedImage;
+                    try(ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                        Thumbnails.of(inputStream)
+                                .scale(1)
+                                .outputFormat("jpg").toOutputStream(baos);
+                        image = HttpUtil.getImageFromBytes(baos.toByteArray(), contact);
+                    } catch(IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    contact.sendMessage(image);
+                }
+            }).build();
     @DeclaredCommand("成绩查询")
     public static final ArgsCommand msgUserPlayed = new ArgsCommandBuilder()
             .prefix("成绩查询", "查询成绩", "myplay")

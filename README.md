@@ -1,4 +1,4 @@
-# DanceCubeBot
+# DanceFengBot
 
 这是一个基于**Mirai & Java**的舞立方机器人
 
@@ -24,6 +24,13 @@
 - 设置默认 Token
 - 查看个人 Token
 - 强制刷新 Token
+
+> ~~一些咕咕咕还没做的功能~~：
+>
+> - 今日运势
+> - 谱师功能
+>
+> 或许等到2077年才能做出来💦💦
 
 ## 搭建指南
 
@@ -82,8 +89,11 @@ DcConfig
     │
     ├─UserRatioImage
     │      A.png
+    │      AP.png
     │      B.png
     │      Background1.png
+    │      Background2.png
+    │      Background3.png
     │      C.png
     │      Card1.png
     │      Card2.png
@@ -165,6 +175,112 @@ gaodeMapKeys:
 ### 开发帮助
 
 看不懂？翻翻源码就知道了！
+
+#### 指令功能
+
+本机器人支持**正则指令**和**参数指令**两种指令触发
+
+所有的指令存放在 `AllCommands` 类中，具体在**声明指令**后，
+会在调用 `init()` 后，被自动保存到如下两个属性中
+
+```java
+public class AllCommands {
+  public static HashSet<RegexCommand> regexCommands = new HashSet<>();  //所有正则指令
+  public static HashSet<ArgsCommand> argsCommands = new HashSet<>();  //所有参数指令
+
+  // your commands...
+}
+```
+
+#### 指令声明
+
+你需要使用 `@DeclaredCommand("name")` 来声明一个`public static final`指令对象，  
+没有 `@DeclaredCommand("name")` 的对象不会被保存，  
+参数为指令名，没有实际用途，仅便于开发者，使用具体见以下实例
+
+#### 正则指令
+
+你可以通过 `RegexCommandBuilder` 链式调用来创建一个 `RegexCommand` 对象，例如：
+
+```java
+public class AllCommands {
+
+  @DeclaredCommand("舞立方自制谱兑换")  //指令声明
+  public static final RegexCommand gainMusicByCode = new RegexCommandBuilder()
+          .regex("[a-zA-Z0-9]{15}", false)
+          .onCall(Scope.USER, (event, contact, qq, args) -> {
+            Token token = loginDetect(contact, qq);
+            if(token==null) return;
+
+            // type your code here
+
+          }).build();
+}
+```
+
+---
+`regex(String regex, boolean lineOnly)`  
+正则匹配方式，`regex`为正则表达式字符串， `lineOnly`为是否仅匹配单行，当为`true`时会默认加上 `^...$`
+行匹配标识，默认为`true`
+
+`onCall(Scope scope, MsgHandleable (lambda) )`  
+调用指令，`scope`为作用域，`lambda`为调用指令实现体，你需要传入`(event, contact, qq, args) -> {}`,其中`args`无需实现。
+
+`build()`  
+构建指令，返回一个`RegexCommand`对象
+
+#### 参数指令
+
+类似于**正则指令**，你需要使用`ArgsCommandBuilder`来创建一个`ArgsCommand`对象
+
+```java
+public class AllCommands {
+  @DeclaredCommand("查找舞立方机台")
+  public static final ArgsCommand msgMachineList = new ArgsCommandBuilder()
+          .prefix("查找舞立方", "查找机台", "舞立方")
+          .form(ArgsCommand.CHAR)
+          .onCall(Scope.GROUP, (event, contact, qq, args) -> {
+            if(args==null) return;
+
+            // type your code here...
+
+          }).build();
+}
+```
+
+---
+`prefix(String... name)`  
+用于声明一个参数指令的前缀，仅当消息触发前缀后才会匹配参数
+
+`form(Pattern... patterns)`  
+声明参数的格式，建议使用`ArgsCommand`类提供的模板：
+
+```java
+public class ArgsCommand extends AbstractCommand {
+  // 数字
+  public static final Pattern NUMBER = Pattern.compile("\\d+");
+  // 字母＋数字
+  public static final Pattern WORD = Pattern.compile("[0-9a-zA-z]+");
+  // 非空字符
+  public static final Pattern CHAR = Pattern.compile("\\S+");
+}
+```
+
+`onCall(Scope scope, MsgHandleable (lambda) )`  
+和参数指令类似，但是获取参数的值需要使用到`args`来获取（需要做非`null`判定）
+
+#### 作用域
+
+```java
+public enum Scope {
+  GLOBAL, // 全局指令
+  USER, // 仅用户
+  GROUP, //仅群聊
+  ADMIN, //仅管理员（大铃）
+}
+```
+
+作用域用于对不同的聊天环境触发不同的`onCall()`功能
 
 ## 一些提醒
 

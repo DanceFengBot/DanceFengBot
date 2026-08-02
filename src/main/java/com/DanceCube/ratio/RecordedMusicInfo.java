@@ -85,4 +85,5 @@ public abstract class RecordedMusicInfo {
     }
 
     abstract boolean isOfficial();
+
 }

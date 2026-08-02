@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.Tools.HttpUtil;
 import okhttp3.Response;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -33,6 +34,7 @@ public class Machine {
                 json = response.body().string();
                 response.close();
             }
+            assert json != null;
             JsonParser.parseString(json).getAsJsonArray().forEach(element -> {
                 Machine machine = new Machine();
                 JsonObject object = element.getAsJsonObject();
@@ -96,10 +98,10 @@ public class Machine {
         return HttpUtil.httpApi(url
                 , Map.of("Authorization", token.getBearerToken()));
     }
-//
-//    @Test
-//    public void test() {
-//        System.out.println(getMachineList("六安"));
-//    }
+
+    @Test
+    public void test() {
+        System.out.println(getMachineList("北京朝阳"));
+    }
 }
 

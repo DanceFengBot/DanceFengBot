@@ -88,8 +88,8 @@ public class UserRatioBest30Image {
             if(info==null) {
                 System.err.println("# 战力分析时个人信息获取失败");
             }
-            Ladder ladder = Ladder.get(token).stream().filter(Ladder::isCurrent).findFirst().orElse(null);
-            int rank = ladder != null && ladder.isCurrent() ? ladder.getLevelGrade() : -1;
+            Ladder ladder = Ladder.get(token).stream().filter(Ladder::getIsCurrent).findFirst().orElse(null);
+            int rank = ladder != null && ladder.getIsCurrent() ? ladder.getLevelGrade() : -1;
             // 获取背景图片
             CompletableFuture<BufferedImage> backgroundImgFuture = CompletableFuture.supplyAsync(() -> {
                 try {

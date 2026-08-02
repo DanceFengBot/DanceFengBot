@@ -768,7 +768,7 @@ public class AllCommands {
                     return;
                 }
                 // 正在登录检测
-                switch(args[0]) {
+                switch(Objects.requireNonNull(args[0])) {
                     case "all" -> logStatus.clear();
                     case "me" -> contact.sendMessage(logStatus.remove(qq) ? "已清空！" : "未找到登录！");
                 }

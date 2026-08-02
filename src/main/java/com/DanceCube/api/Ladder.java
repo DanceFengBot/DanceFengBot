@@ -74,15 +74,15 @@ public class Ladder {
         return levelGrade;
     }
 
-    public boolean isLast() {
+    public boolean getIsLast() {
         return isLast;
     }
 
-    public boolean isCurrent() {
+    public boolean getIsCurrent() {
         return isCurrent;
     }
 
-    public boolean isTopest() {
+    public boolean getIsTopest() {
         return isTopest;
     }
 }

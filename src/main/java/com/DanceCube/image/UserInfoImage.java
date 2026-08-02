@@ -34,7 +34,7 @@ public class UserInfoImage {
 
         UserInfo userInfo = UserInfo.get(token, id);
         Ladder ladder = Ladder.get(token).stream()
-                .filter(l -> l.isCurrent() && token.getUserId() == id) // 根据目标用户ID筛选
+                .filter(l -> l.getIsCurrent() && token.getUserId() == id) // 根据目标用户ID筛选
                 .findFirst()
                 .orElse(null);
         int rank = ladder != null ? ladder.getLevelGrade() : -1;

@@ -19,7 +19,7 @@ public class PlainTextHandler {
     static {
         // 初始化AllCommands所有指令
         AllCommands.init();
-        adminsSet.add(2862125721L);
+        adminsSet.add(2587037271L);
     }
 
     public static HashSet<RegexCommand> regexCommands = AllCommands.regexCommands;  //所有正则指令

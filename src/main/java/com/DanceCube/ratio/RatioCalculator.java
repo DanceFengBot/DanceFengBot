@@ -53,12 +53,23 @@ public class RatioCalculator {
             System.out.printf("#%d Name:%s, Ratio: %.2f\n", i + 1, musicInfo.getName(), musicInfo.getRatio());
         }
 
+        //Specific Level 30
+        int level = 14; // Specify the level you want to retrieve
+        int page = 1; // Specify the page you want to retrieve
+        List<RankMusicInfo> levelScoresList = getLevelScoresList(allRankList, true, level, page);
+        System.out.println("\n\n#The Level 30 PlayerMusic" + "\nLevel: " + level + " Page: " + page + "\ntotalPages: " + levelScoresList.size());
+        for(int i = 0, levelScoresListSize = levelScoresList.size(); i<levelScoresListSize; i++) {
+            RankMusicInfo musicInfo = levelScoresList.get(i);
+            System.out.printf("#%d Name:%s, Ratio: %.2f\n", i + 1, musicInfo.getName(), musicInfo.getRatio());
+        }
+
         //Summing up
         System.out.println("\n# Sum #");
         float best15Avg = average(rank15List);
         float recent15Avg = average(recent15List);
         System.out.printf("Best 15 Ratio: %.2f\n", best15Avg);
         System.out.printf("Recent 15 Ratio: %.2f\n", recent15Avg);
+        System.out.printf("Best 30 Ratio: %.2f\n", average(rank30List));
         System.out.println("Your average ratio: " + (best15Avg + recent15Avg) / 2);
 
         System.out.println("Your Accurate Ratio:" + UserInfo.get(new Token(auth.substring(7)), 939088).getLvRatio());
@@ -137,7 +148,7 @@ public class RatioCalculator {
      * 判断是否满足算入战力要求
      */
     public static boolean isRatioValid(RecordedMusicInfo musicInfo) {
-        return musicInfo.level>0 && musicInfo.level<20 && musicInfo.isOfficial();
+        return musicInfo.level>=0 && musicInfo.isOfficial();
     }
 
 
@@ -250,6 +261,32 @@ public class RatioCalculator {
             }
         }
         return subRankList;
+    }
+
+    /**
+     * 获取指定等级30首 (可能小于30)
+     *
+     * @param musicInfoList  源Best列表
+     * @param ratioValidOnly 仅可计入战力模式
+     * @return b30
+     */
+    public static List<RankMusicInfo> getLevelScoresList(List<RankMusicInfo> musicInfoList, boolean ratioValidOnly, int level, int page) {
+        List<RankMusicInfo> validMusicList = new ArrayList<>();
+        // 先获取全部符合条件的数据
+        if (ratioValidOnly) {
+            for (RankMusicInfo musicInfo : musicInfoList) {
+                if (isRatioValid(musicInfo) && musicInfo.getLevel() == level) {
+                    validMusicList.add(musicInfo);
+                }
+            }
+        } else {
+            for (RankMusicInfo musicInfo : musicInfoList) {
+                if (musicInfo.getLevel() == level) {
+                    validMusicList.add(musicInfo);
+                }
+            }
+        }
+        return validMusicList;
     }
 
 }

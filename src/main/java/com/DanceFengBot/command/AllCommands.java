@@ -521,6 +521,47 @@ public class AllCommands {
                 contact.sendMessage(image);
             }).build();
 
+    @DeclaredCommand("难度分数列表")
+    public static final ArgsCommand levelScores = new ArgsCommandBuilder()
+            .prefix("分数列表")
+            .form(ArgsCommand.NUMBER)
+            .onCall(Scope.GLOBAL, (event, contact, qq, args) -> {
+                int level = 1, pages = 1;
+                Token token = getToken(contact, qq, onNoLoginCall, onInvalidCall);
+                if (token == null) return;
+
+                if (args != null) {
+                    try {
+                        assert args[0] != null;
+                        level = Integer.parseInt(args[0]);
+                        if (args.length > 1 && args[1] != null) {
+                            pages = Integer.parseInt(args[1]);
+                        }
+                    } catch (NumberFormatException e) {
+                        contact.sendMessage("啊...这个数字是什么");
+                        return;
+                    }
+                }
+
+                contact.sendMessage("小枫正在计算中,等一下下💦...");
+                InputStream inputStream = LevelScoresImage.generate(token, level, pages);
+                Image image;
+                if (inputStream != null) {
+                    BufferedImage bufferedImage;
+                    try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                        Thumbnails.of(inputStream)
+                                .scale(1)
+                                .outputFormat("jpg")
+                                .toOutputStream(baos);
+                        image = HttpUtil.getImageFromBytes(baos.toByteArray(), contact);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    contact.sendMessage(image);
+                }
+            }).build();
+
+
     @DeclaredCommand("ReplyItem") //Todo Beta
     public static final RegexCommand msgReplyItem = new RegexCommandBuilder()
             .regex("myri")

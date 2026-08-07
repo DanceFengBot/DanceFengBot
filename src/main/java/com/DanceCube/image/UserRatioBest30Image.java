@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -67,20 +68,20 @@ public class UserRatioBest30Image {
         // 个人信息
         UserInfo info;
         List<LvRatioHistory> ratioList;
-//        if(!itIsAReeeeaaaalWindowsMark()) {
-        info = UserInfo.get(token);
-        ratioList = LvRatioHistory.get(token);
-//        } else {
-//            CompletableFuture<UserInfo> userInfoFuture = CompletableFuture.supplyAsync(() -> UserInfo.get(token));
-//            CompletableFuture<ArrayList<LvRatioHistory>> ratioFuture = CompletableFuture.supplyAsync(() -> LvRatioHistory.get(token));
-//            try {
-//                info = userInfoFuture.get();
-//                ratioList = ratioFuture.get();
-//            } catch(ExecutionException | InterruptedException e) {
-//                info = UserInfo.get(token);
-//                ratioList = LvRatioHistory.get(token);
-//            }
-//        }
+        if(!itIsAReeeeaaaalWindowsMark()) {
+            info = UserInfo.get(token);
+            ratioList = LvRatioHistory.get(token);
+        } else {
+            CompletableFuture<UserInfo> userInfoFuture = CompletableFuture.supplyAsync(() -> UserInfo.get(token));
+            CompletableFuture<ArrayList<LvRatioHistory>> ratioFuture = CompletableFuture.supplyAsync(() -> LvRatioHistory.get(token));
+            try {
+                info = userInfoFuture.get();
+                ratioList = ratioFuture.get();
+            } catch(ExecutionException | InterruptedException e) {
+                info = UserInfo.get(token);
+                ratioList = LvRatioHistory.get(token);
+            }
+        }
 
         ImageDrawer drawer;
         try {

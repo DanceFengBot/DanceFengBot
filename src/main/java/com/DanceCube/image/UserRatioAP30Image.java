@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -67,20 +68,20 @@ public class UserRatioAP30Image {
         // 个人信息
         UserInfo info;
         List<LvRatioHistory> ratioList;
-//        if(!itIsAReeeeaaaalWindowsMark()) {
-        info = UserInfo.get(token);
-        ratioList = LvRatioHistory.get(token);
-//        } else {
-//            CompletableFuture<UserInfo> userInfoFuture = CompletableFuture.supplyAsync(() -> UserInfo.get(token));
-//            CompletableFuture<ArrayList<LvRatioHistory>> ratioFuture = CompletableFuture.supplyAsync(() -> LvRatioHistory.get(token));
-//            try {
-//                info = userInfoFuture.get();
-//                ratioList = ratioFuture.get();
-//            } catch(ExecutionException | InterruptedException e) {
-//                info = UserInfo.get(token);
-//                ratioList = LvRatioHistory.get(token);
-//            }
-//        }
+        if(!itIsAReeeeaaaalWindowsMark()) {
+            info = UserInfo.get(token);
+            ratioList = LvRatioHistory.get(token);
+        } else {
+            CompletableFuture<UserInfo> userInfoFuture = CompletableFuture.supplyAsync(() -> UserInfo.get(token));
+            CompletableFuture<ArrayList<LvRatioHistory>> ratioFuture = CompletableFuture.supplyAsync(() -> LvRatioHistory.get(token));
+            try {
+                info = userInfoFuture.get();
+                ratioList = ratioFuture.get();
+            } catch(ExecutionException | InterruptedException e) {
+                info = UserInfo.get(token);
+                ratioList = LvRatioHistory.get(token);
+            }
+        }
 
         ImageDrawer drawer;
         try {
@@ -277,7 +278,7 @@ public class UserRatioAP30Image {
     public void test() throws IOException {
         System.out.println("Running...");
         Token token = new Token(5559326,
-                "bFsMGipo9q847jT1s5Yw5r-TpxSoUAGrEsEx5IWEf0obam7Qpc97fEqpJzNCeQQ-LrEogBTBF_CLb-F6xJuTdm2WJx6MZu6VNV2tGluj8a_IL7fzDrjif7VB-CXwjtjO6EKu06McSCnicXSGGFlX5L76BOfFvVy3mbJHcIhJkNRCdQpa6oDlknIlynGG2EcndL23aK5LD5-9mN9k3wgxBDsZGpOd8tOQqhtNcmE3Tlz--ZgQvpHTlvn785jLRE-rLF7Dq6joMfVFN-mmGlvCWu_WIJR2bb-nIjJTpqx0ZR7YyQpheK5P1XzEBtZGZCm5J_uyulzNtvpGIk2jUK8-v9fpo_UqFkR7QsIBb1YglGW5QWZgBGHjxfLQHl48aXwg");
+                "I90WXSzVEoNyrk_Txagk9ZTFH2iH4VDR9OARoVQfLmw4c6MMCPyRWAQZNKq_Wj78jNfrfrh1x7JxVPC5jJN2zfGHvUC9Pl1B18r8OuBMx5uWZ9fL08jo1zvFaq9b7Sy7i8W9gp2Yx-Xv3QIoSGi5FvVAD7zmmEFdnhUBhUTv5PcMp8-x-sVzNwDPoe4JumaTxHWbMqBG8-XqH1QIJOvhF6e0vo3yyh_burunQh0Fr_Tf5PDbNZlBeFk_cUJKLwfRQ-YWmhW1f2dFbQ37w0YM3XMpYIY1AACr5zsiSXKbV3-Uin9pqNIjB9AKcY5ruaDwTORG4xEt9ydIkuJY3W-P0vjq_or6m5He1LTFuczWTOL5nuLGchJ047gBdNAgF3jX");
         String path = "C:\\Users\\Administrator\\IdeaProjects\\DFB\\result.png";
 
         InputStream image = generate(token);
@@ -285,8 +286,6 @@ public class UserRatioAP30Image {
                 .scale(1)
                 .outputFormat("png")
                 .toFile(path);
-//        ImageDrawer.write(ImageDrawer.convertPngToJpg(ImageDrawer.read(image),0.5f), path);
-//        ImageDrawer.write(ImageDrawer.read(image), path);
         System.out.println("Done!");
     }
 }

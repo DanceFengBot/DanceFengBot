@@ -131,3 +131,8 @@ src/test/kotlin/RunTerminal.kt
 # Local Test Launch Point working directory
 /debug-sandbox
 /src/main/java/com/ArcadeQueue/
+
+
+#Gradle Wrapper files
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties

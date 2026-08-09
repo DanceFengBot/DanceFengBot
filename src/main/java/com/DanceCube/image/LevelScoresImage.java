@@ -1,7 +1,6 @@
 package com.DanceCube.image;
 
 import com.DanceCube.api.Ladder;
-import com.DanceCube.api.LvRatioHistory;
 import com.DanceCube.info.UserInfo;
 import com.DanceCube.music.CoverUtil;
 import com.DanceCube.ratio.AccGrade;
@@ -226,6 +225,7 @@ public class LevelScoresImage {
                 validMusicList.add(musicInfo);
             }
         }
+        validMusicList.sort((o1, o2) -> Float.compare(o2.getAccuracy(), o1.getAccuracy()));
         return validMusicList;
     }
 
@@ -250,6 +250,7 @@ public class LevelScoresImage {
             default -> CARD_1;
         };
     }
+
     @Test
     public void test() throws IOException {
         System.out.println("Running...");
@@ -257,7 +258,7 @@ public class LevelScoresImage {
                 "I90WXSzVEoNyrk_Txagk9ZTFH2iH4VDR9OARoVQfLmw4c6MMCPyRWAQZNKq_Wj78jNfrfrh1x7JxVPC5jJN2zfGHvUC9Pl1B18r8OuBMx5uWZ9fL08jo1zvFaq9b7Sy7i8W9gp2Yx-Xv3QIoSGi5FvVAD7zmmEFdnhUBhUTv5PcMp8-x-sVzNwDPoe4JumaTxHWbMqBG8-XqH1QIJOvhF6e0vo3yyh_burunQh0Fr_Tf5PDbNZlBeFk_cUJKLwfRQ-YWmhW1f2dFbQ37w0YM3XMpYIY1AACr5zsiSXKbV3-Uin9pqNIjB9AKcY5ruaDwTORG4xEt9ydIkuJY3W-P0vjq_or6m5He1LTFuczWTOL5nuLGchJ047gBdNAgF3jX");
         String path = "C:\\Users\\Administrator\\IdeaProjects\\DFB\\result.png";
 
-        InputStream image = generate(token, 13, 5);
+        InputStream image = generate(token, 13, 1);
         Thumbnails.of(image)
                 .scale(1)
                 .outputFormat("png")

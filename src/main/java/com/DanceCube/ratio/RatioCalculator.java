@@ -30,7 +30,6 @@ public class RatioCalculator {
         List<RankMusicInfo> rank15List = new ArrayList<>(getSubRank15List(allRankList, true));
         List<RecentMusicInfo> recent15List = new ArrayList<>(getSubRecent15List(allRecentList, false));
         List<RankMusicInfo> rank30List = new ArrayList<>(getSubRank30List(allRankList,true));
-        List<RankMusicInfo> AP30List = new ArrayList<>(getSubRank30List(allRankList,true));
 
         //Best 15
         System.out.println("#The Best 15 PlayerMusic");
@@ -56,7 +55,7 @@ public class RatioCalculator {
         //Specific Level 30
         int level = 14; // Specify the level you want to retrieve
         int page = 1; // Specify the page you want to retrieve
-        List<RankMusicInfo> levelScoresList = getLevelScoresList(allRankList, true, level, page);
+        List<RankMusicInfo> levelScoresList = getLevelScoresList(allRankList, true, level);
         System.out.println("\n\n#The Level 30 PlayerMusic" + "\nLevel: " + level + " Page: " + page + "\ntotalPages: " + levelScoresList.size());
         for(int i = 0, levelScoresListSize = levelScoresList.size(); i<levelScoresListSize; i++) {
             RankMusicInfo musicInfo = levelScoresList.get(i);
@@ -143,6 +142,7 @@ public class RatioCalculator {
         }
         return musicInfoList;
     }
+
 
     /**
      * 判断是否满足算入战力要求
@@ -270,7 +270,7 @@ public class RatioCalculator {
      * @param ratioValidOnly 仅可计入战力模式
      * @return b30
      */
-    public static List<RankMusicInfo> getLevelScoresList(List<RankMusicInfo> musicInfoList, boolean ratioValidOnly, int level, int page) {
+    public static List<RankMusicInfo> getLevelScoresList(List<RankMusicInfo> musicInfoList, boolean ratioValidOnly, int level) {
         List<RankMusicInfo> validMusicList = new ArrayList<>();
         // 先获取全部符合条件的数据
         if (ratioValidOnly) {
@@ -288,7 +288,6 @@ public class RatioCalculator {
         }
         return validMusicList;
     }
-
 }
 
 

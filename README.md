@@ -282,6 +282,12 @@ public enum Scope {
 
 作用域用于对不同的聊天环境触发不同的`onCall()`功能
 
+## 捐赠说明
+本项目为开源项目，接受各种形式的友情捐赠。您的支持将帮助我们持续改进和维护项目
+
+<img src="weixin.png" alt="weixin" style="zoom: 25%;" /><img src="alipay.jpg" alt="alipay" style="zoom:25%;" />
+
+
 ## 一些提醒
 
 如果真的有人需要搭建，以下是一些注意事项：

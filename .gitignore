@@ -136,3 +136,5 @@ src/test/kotlin/RunTerminal.kt
 #Gradle Wrapper files
 /gradle/wrapper/gradle-wrapper.jar
 /gradle/wrapper/gradle-wrapper.properties
+*.png
+*.jpg

@@ -285,7 +285,11 @@ public enum Scope {
 ## 捐赠说明
 本项目为开源项目，接受各种形式的友情捐赠。您的支持将帮助我们持续改进和维护项目
 
-<img src="weixin.png" alt="weixin" style="zoom: 25%;" /><img src="alipay.jpg" alt="alipay" style="zoom:25%;" />
+<p>
+    <img src="alipay.jpg" alt="alipay" width="50%" /><img src="weixin.png" alt="weixin" width="50%"  />
+</p>
+
+
 
 
 ## 一些提醒

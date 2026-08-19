@@ -80,7 +80,7 @@ public class AllCommands {
 
     @DeclaredCommand("help")
     public static final RegexCommand msgMenu = new RegexCommandBuilder()
-            .multiStrings("菜单", "help")
+            .multiStrings("菜单", "help", "帮助")
             .onCall(Scope.GLOBAL, (event, contact, qq, args) -> {
                 contact.sendMessage("详见https://www.kdocs.cn/l/ccLRaUCuNMX0。");
             }).build();
@@ -476,49 +476,6 @@ public class AllCommands {
                     }
                     contact.sendMessage(image);
                 }
-            }).build();
-    @DeclaredCommand("成绩查询")
-    public static final ArgsCommand msgUserPlayed = new ArgsCommandBuilder()
-            .prefix("成绩查询", "查询成绩", "myplay")
-            .form(ArgsCommand.NUMBER)
-            .onCall(Scope.GLOBAL, (event, contact, qq, args) -> {
-                Token token = getToken(contact, qq, onNoLoginCall, onInvalidCall);
-                if(token == null) return;
-
-                int index = 1;
-                if(args != null) {
-                    try {
-                        assert args[0] != null;
-                        index = Integer.parseInt(args[0]);
-                    } catch(NumberFormatException e) {
-                        contact.sendMessage("啊...这个数字是什么");
-                        return;
-                    }
-                }
-                List<RecentMusicInfo> allRecentList = RatioCalculator.getAllRecentList(token.getBearerToken());
-                if(allRecentList.isEmpty()) {
-                    contact.sendMessage("你好像没有打过任何歌曲呢");
-                    return;
-                }
-                if(index > allRecentList.size()) {
-                    contact.sendMessage("数字太大啦！小枫获取不到啦");
-                    return;
-                }
-                contact.sendMessage("小枫正在计算中,等一下下💦...");
-                RecentMusicInfo recentMusicInfo = allRecentList.get(index - 1);
-
-                InputStream inputStream = LastPlayImage.generate(token, recentMusicInfo);
-                Image image;
-                BufferedImage bufferedImage;
-                try(ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-                    Thumbnails.of(inputStream)
-                            .scale(1)
-                            .outputFormat("jpg").toOutputStream(baos);
-                    image = HttpUtil.getImageFromBytes(baos.toByteArray(), contact);
-                } catch(IOException e) {
-                    throw new RuntimeException(e);
-                }
-                contact.sendMessage(image);
             }).build();
 
     @DeclaredCommand("难度分数列表")

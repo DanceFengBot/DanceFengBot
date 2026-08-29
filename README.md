@@ -5,6 +5,7 @@
 
 *给个**star**或许我会很开心🥰*
 
+[![Powered by OrcaRouter](https://img.shields.io/badge/Powered_by-OrcaRouter-2563eb)](https://www.orcarouter.ai/ref/ref_f075854cf0016dbeaa03)
 ## 功能介绍
 
 用户可用功能：
